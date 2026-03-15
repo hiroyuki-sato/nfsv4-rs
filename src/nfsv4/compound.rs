@@ -1,3 +1,8 @@
+#![allow(dead_code)]
+
+use crate::nfsv4::ops::*;
+use crate::nfsv4::types::*;
+
 /// RFC7531: nfs_opnum4
 ///
 /// Operation numbers used in COMPOUND requests and responses.
@@ -187,17 +192,16 @@ pub struct Compound4Res {
     pub resarray: Vec<NfsResOp4>,
 }
 
-///
-/// Remote file service routines
-///
-/// program NFS4_PROGRAM {
-///         version NFS_V4 {
-///                 void
-///                         NFSPROC4_NULL(void) = 0;
-/// 
-///                 COMPOUND4res
-///                         NFSPROC4_COMPOUND(COMPOUND4args) = 1;
-/// 
-///         } = 4;
-/// } = 100003;
-
+//
+// Remote file service routines
+//
+// program NFS4_PROGRAM {
+//         version NFS_V4 {
+//                 void
+//                         NFSPROC4_NULL(void) = 0;
+//
+//                 COMPOUND4res
+//                         NFSPROC4_COMPOUND(COMPOUND4args) = 1;
+//
+//         } = 4;
+// } = 100003;

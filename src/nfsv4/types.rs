@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub const FHSIZE: usize = 128;
 pub const VERIFIER_SIZE: usize = 8;
 pub const OTHER_SIZE: usize = 12;
@@ -34,7 +36,6 @@ pub enum Ftype4 {
     /// NF4NAMEDATTR - Named Attribute
     NamedAttribute = 9,
 }
-
 
 /// RFC7531: nfsstat4 (partial)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -113,8 +114,6 @@ pub enum NfsStat4 {
     CbPathDown = 10048,
 }
 
-
-
 // RFC7531 Basic data types (selected)
 
 pub type Attrlist4 = Vec<u8>;
@@ -146,7 +145,6 @@ pub type NfsFh4 = Vec<u8>;
 
 /// opaque verifier4[NFS4_VERIFIER_SIZE]
 pub type Verifier4 = [u8; VERIFIER_SIZE];
-
 
 /// RFC7531: nfstime4
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -191,14 +189,12 @@ pub struct FsLocations4 {
     pub locations: Vec<FsLocation4>,
 }
 
-
 pub const ACL4_SUPPORT_ALLOW_ACL: u32 = 0x00000001;
 pub const ACL4_SUPPORT_DENY_ACL: u32 = 0x00000002;
 pub const ACL4_SUPPORT_AUDIT_ACL: u32 = 0x00000004;
 pub const ACL4_SUPPORT_ALARM_ACL: u32 = 0x00000008;
 
 pub type AclSupport4 = u32;
-
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
@@ -210,8 +206,6 @@ pub enum AceType4 {
 }
 
 pub type AceTypeRaw = u32;
-
-
 
 /// ACE Flag
 pub type AceFlag4 = u32;
@@ -252,17 +246,12 @@ pub const ACE4_WRITE_ACL: AceMask4 = 0x00040000;
 pub const ACE4_WRITE_OWNER: AceMask4 = 0x00080000;
 pub const ACE4_SYNCHRONIZE: AceMask4 = 0x00100000;
 
-
 /// ACE4_GENERIC_READ =
 pub const ACE4_GENERIC_READ: AceMask4 =
-    ACE4_READ_ACL
-    | ACE4_READ_DATA
-    | ACE4_READ_ATTRIBUTES
-    | ACE4_SYNCHRONIZE;
+    ACE4_READ_ACL | ACE4_READ_DATA | ACE4_READ_ATTRIBUTES | ACE4_SYNCHRONIZE;
 
 /// ACE4_GENERIC_WRITE =
-pub const ACE4_GENERIC_WRITE: AceMask4 =
-    ACE4_READ_ACL
+pub const ACE4_GENERIC_WRITE: AceMask4 = ACE4_READ_ACL
     | ACE4_WRITE_DATA
     | ACE4_WRITE_ATTRIBUTES
     | ACE4_WRITE_ACL
@@ -271,11 +260,7 @@ pub const ACE4_GENERIC_WRITE: AceMask4 =
 
 /// ACE4_GENERIC_EXECUTE =
 pub const ACE4_GENERIC_EXECUTE: AceMask4 =
-    ACE4_READ_ACL
-    | ACE4_READ_ATTRIBUTES
-    | ACE4_EXECUTE
-    | ACE4_SYNCHRONIZE;
-
+    ACE4_READ_ACL | ACE4_READ_ATTRIBUTES | ACE4_EXECUTE | ACE4_SYNCHRONIZE;
 
 /// RFC7531: nfsace4
 ///
@@ -305,23 +290,21 @@ pub struct NfsAce4 {
 
 /// Mode4 bitmask values (fattr4_mode attribute)
 
-pub const MODE4_SET_USER_ID: Mode4 = 0x800;      // set user id on execution
-pub const MODE4_SET_GROUP_ID: Mode4 = 0x400;     // set group id on execution
-pub const MODE4_SAVE_TEXT: Mode4 = 0x200;        // save text even after use
+pub const MODE4_SET_USER_ID: Mode4 = 0x800; // set user id on execution
+pub const MODE4_SET_GROUP_ID: Mode4 = 0x400; // set group id on execution
+pub const MODE4_SAVE_TEXT: Mode4 = 0x200; // save text even after use
 
-pub const MODE4_READ_OWNER: Mode4 = 0x100;       // read permission: owner
-pub const MODE4_WRITE_OWNER: Mode4 = 0x080;      // write permission: owner
-pub const MODE4_EXEC_OWNER: Mode4 = 0x040;       // execute permission: owner
+pub const MODE4_READ_OWNER: Mode4 = 0x100; // read permission: owner
+pub const MODE4_WRITE_OWNER: Mode4 = 0x080; // write permission: owner
+pub const MODE4_EXEC_OWNER: Mode4 = 0x040; // execute permission: owner
 
-pub const MODE4_READ_GROUP: Mode4 = 0x020;       // read permission: group
-pub const MODE4_WRITE_GROUP: Mode4 = 0x010;      // write permission: group
-pub const MODE4_EXEC_GROUP: Mode4 = 0x008;       // execute permission: group
+pub const MODE4_READ_GROUP: Mode4 = 0x020; // read permission: group
+pub const MODE4_WRITE_GROUP: Mode4 = 0x010; // write permission: group
+pub const MODE4_EXEC_GROUP: Mode4 = 0x008; // execute permission: group
 
-pub const MODE4_READ_OTHER: Mode4 = 0x004;       // read permission: other
-pub const MODE4_WRITE_OTHER: Mode4 = 0x002;      // write permission: other
-pub const MODE4_EXEC_OTHER: Mode4 = 0x001;       // execute permission: other
-
-pub type Mode4 = u32;
+pub const MODE4_READ_OTHER: Mode4 = 0x004; // read permission: other
+pub const MODE4_WRITE_OTHER: Mode4 = 0x002; // write permission: other
+pub const MODE4_EXEC_OTHER: Mode4 = 0x001; // execute permission: other
 
 /// RFC7531: specdata4
 ///
@@ -401,8 +384,6 @@ pub type Fattr4LeaseTime = NfsLease4;
 /// RFC7531: fattr4_rdattr_error
 /// Error value returned when attribute retrieval fails.
 pub type Fattr4RdAttrError = NfsStat4;
-
-
 
 /// RFC7531: fattr4_acl
 /// Access control list attribute.
@@ -580,7 +561,6 @@ pub type Fattr4RawDev = SpecData4;
 /// Used when setting modification time.
 /// Represented directly as `SetTime4` in Rust.
 
-
 /// RFC7531: Mandatory attribute identifiers.
 ///
 /// These values represent attribute IDs used in the attribute bitmap
@@ -624,7 +604,6 @@ pub const FATTR4_RDATTR_ERROR: u32 = 11;
 
 /// Filehandle attribute.
 pub const FATTR4_FILEHANDLE: u32 = 19;
-
 
 /// RFC7531: Recommended attribute identifiers.
 ///
@@ -691,7 +670,6 @@ pub const FATTR4_TIME_MODIFY_SET: u32 = 54;
 
 pub const FATTR4_MOUNTED_ON_FILEID: u32 = 55;
 
-
 /// RFC7531: fattr4
 ///
 /// File attribute container.
@@ -732,7 +710,6 @@ pub struct ClientAddr4 {
     /// Universal address string.
     pub r_addr: String,
 }
-
 
 /// RFC7531: cb_client4
 ///

@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+
+use crate::nfsv4::types::*;
+
 /// RFC7531: CB_GETATTR4args
 ///
 /// Arguments for the CB_GETATTR callback operation.

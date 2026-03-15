@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+
+use crate::nfsv4::types::*;
+
 /// RFC7531: ACCESS4args
 ///
 /// Arguments for the ACCESS operation.
@@ -79,7 +83,6 @@ pub struct Commit4ResOk {
     /// Write verifier returned by the server.
     pub writeverf: Verifier4,
 }
-
 
 /// RFC7531: COMMIT4res
 ///
@@ -277,7 +280,6 @@ pub enum Link4Res {
     /// Operation failed with an NFS error status.
     Err(NfsStat4),
 }
-
 
 /// RFC7531: open_to_lock_owner4
 ///
@@ -943,7 +945,6 @@ pub enum Read4Res {
     /// Operation failed with an NFS error status.
     Err(NfsStat4),
 }
-
 
 /// RFC7531: READDIR4args
 ///
