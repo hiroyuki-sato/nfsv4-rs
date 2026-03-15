@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+rpc-transport-rs = { git = "https://github.com/hiroyuki-sato/rpc-transport-rs.git", branch = "main" }
+onc-rpc-rs = { git = "https://github.com/hiroyuki-sato/onc-rpc-rs.git", branch = "main" }
+xdr-rs = { git = "https://github.com/hiroyuki-sato/xdr-rs.git", branch = "main" }
