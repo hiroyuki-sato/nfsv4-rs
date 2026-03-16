@@ -1,7 +1,14 @@
 #![allow(dead_code)]
+#![allow(unused_imports)] // TODO: Remove this once all operations are implemented.
 
+pub mod getattr;
+pub mod lookup;
+pub mod putrootfh;
 pub mod readdir;
 
+pub use getattr::*;
+pub use lookup::*;
+pub use putrootfh::*;
 pub use readdir::*;
 
 use xdr_rs::reader::XdrReader;
@@ -203,37 +210,6 @@ pub struct DelegReturn4Args {
 pub struct DelegReturn4Res {
     /// NFS operation status.
     pub status: NfsStat4,
-}
-
-/// RFC7531: GETATTR4args
-///
-/// Arguments for the GETATTR operation.
-/// CURRENT_FH must refer to a file or directory.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct GetAttr4Args {
-    /// Bitmap of requested attributes.
-    pub attr_request: Bitmap4,
-}
-
-/// RFC7531: GETATTR4resok
-///
-/// Successful result of the GETATTR operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct GetAttr4ResOk {
-    /// Returned object attributes.
-    pub obj_attributes: Fattr4,
-}
-
-/// RFC7531: GETATTR4res
-///
-/// Result of the GETATTR operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum GetAttr4Res {
-    /// Operation succeeded.
-    Ok(GetAttr4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
 }
 
 /// RFC7531: GETFH4resok
@@ -446,34 +422,6 @@ pub enum LockU4Res {
 
     /// Other NFS error.
     Err(NfsStat4),
-}
-
-/// RFC7531: LOOKUP4args
-///
-/// Arguments for the LOOKUP operation.
-/// CURRENT_FH must refer to a directory.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Lookup4Args {
-    /// Name of the object to look up.
-    pub objname: Component4,
-}
-
-/// RFC7531: LOOKUP4res
-///
-/// Result of the LOOKUP operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Lookup4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
-
-/// RFC7531: LOOKUPP4res
-///
-/// Result of the LOOKUPP operation (lookup parent directory).
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct LookupP4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
 }
 
 /// RFC7531: NVERIFY4args
@@ -900,16 +848,6 @@ pub struct PutFh4Res {
 /// On success, CURRENT_FH becomes the public filehandle.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PutPubFh4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
-
-/// RFC7531: PUTROOTFH4res
-///
-/// Result of the PUTROOTFH operation.
-/// On success, CURRENT_FH becomes the root filehandle.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct PutRootFh4Res {
     /// NFS operation status.
     pub status: NfsStat4,
 }
