@@ -1,5 +1,9 @@
 #![allow(dead_code)]
 
+use xdr_rs::reader::XdrReader;
+use xdr_rs::writer::XdrWriter;
+
+use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
 
 /// RFC7531: ACCESS4args
@@ -966,6 +970,35 @@ pub struct ReadDir4Args {
 
     /// Bitmap of requested attributes for each entry.
     pub attr_request: Bitmap4,
+}
+
+impl ReadDir4Args {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        let cookie = r.read_u64()?;
+        // TODO
+        let cookieverf: [u8; VERIFIER_SIZE] = r
+            .read_fixed_opaque(VERIFIER_SIZE)?
+            .try_into()
+            .map_err(|_| Nfsv4Error::InvalidData("expected 8 bytes".into()))?;
+        let dircount = r.read_u32()?;
+        let maxcount = r.read_u32()?;
+        let attr_request = r.read_array(|r| r.read_u32())?;
+        Ok(Self {
+            cookie,
+            cookieverf,
+            dircount,
+            maxcount,
+            attr_request,
+        })
+    }
+    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        w.write_u64(self.cookie)?;
+        w.write_fixed_opaque(&self.cookieverf)?;
+        w.write_u32(self.dircount)?;
+        w.write_u32(self.maxcount)?;
+        w.write_array(&self.attr_request, |w, v| w.write_u32(*v))?;
+        Ok(())
+    }
 }
 
 /// RFC7531: entry4
