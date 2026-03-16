@@ -3,6 +3,8 @@
 
 pub mod access;
 pub mod close;
+pub mod commit;
+pub mod create;
 pub mod getattr;
 pub mod lookup;
 pub mod putrootfh;
@@ -10,6 +12,8 @@ pub mod readdir;
 
 pub use access::*;
 pub use close::*;
+pub use commit::*;
+pub use create::*;
 pub use getattr::*;
 pub use lookup::*;
 pub use putrootfh::*;
@@ -20,103 +24,6 @@ use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
-
-/// RFC7531: COMMIT4args
-///
-/// Arguments for the COMMIT operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Commit4Args {
-    /// Starting offset of the range to commit.
-    pub offset: Offset4,
-
-    /// Number of bytes to commit.
-    pub count: Count4,
-}
-
-/// RFC7531: COMMIT4resok
-///
-/// Successful result of the COMMIT operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Commit4ResOk {
-    /// Write verifier returned by the server.
-    pub writeverf: Verifier4,
-}
-
-/// RFC7531: COMMIT4res
-///
-/// Result of the COMMIT operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Commit4Res {
-    /// Operation succeeded.
-    Ok(Commit4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
-
-/// RFC7531: createtype4
-///
-/// Type-specific data used by the CREATE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum CreateType4 {
-    /// Symbolic link with link target data.
-    SymbolicLink(LinkText4),
-
-    /// Block device special file.
-    BlockDevice(SpecData4),
-
-    /// Character device special file.
-    CharacterDevice(SpecData4),
-
-    /// Socket special file.
-    Socket,
-
-    /// FIFO special file.
-    Fifo,
-
-    /// Directory.
-    Directory,
-}
-
-/// RFC7531: CREATE4args
-///
-/// Arguments for the CREATE operation.
-/// The current filehandle (CURRENT_FH) must refer to a directory.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Create4Args {
-    /// Type of object to create (file, directory, symlink, device, etc.).
-    pub objtype: CreateType4,
-
-    /// Name of the object to create.
-    pub objname: Component4,
-
-    /// Attributes to set during creation.
-    pub createattrs: Fattr4,
-}
-
-/// RFC7531: CREATE4resok
-///
-/// Successful result of the CREATE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Create4ResOk {
-    /// Change information for the directory.
-    pub cinfo: ChangeInfo4,
-
-    /// Bitmap indicating which attributes were set.
-    pub attrset: Bitmap4,
-}
-
-/// RFC7531: CREATE4res
-///
-/// Result of the CREATE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Create4Res {
-    /// Operation succeeded.
-    Ok(Create4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
 
 /// RFC7531: DELEGPURGE4args
 ///
