@@ -1,5 +1,9 @@
 #![allow(dead_code)]
 
+use xdr_rs::reader::XdrReader;
+use xdr_rs::writer::XdrWriter;
+
+use crate::error::Nfsv4Error;
 use crate::nfsv4::ops::*;
 use crate::nfsv4::types::*;
 
@@ -49,6 +53,54 @@ pub enum NfsOpnum4 {
 
     /// Returned when an undefined operation is encountered.
     Illegal = 10044,
+}
+
+impl TryFrom<i32> for NfsOpnum4 {
+    type Error = Nfsv4Error;
+
+    fn try_from(v: i32) -> Result<Self, Self::Error> {
+        match v {
+            3 => Ok(NfsOpnum4::Access),
+            4 => Ok(NfsOpnum4::Close),
+            5 => Ok(NfsOpnum4::Commit),
+            6 => Ok(NfsOpnum4::Create),
+            7 => Ok(NfsOpnum4::DelegPurge),
+            8 => Ok(NfsOpnum4::DelegReturn),
+            9 => Ok(NfsOpnum4::GetAttr),
+            10 => Ok(NfsOpnum4::GetFh),
+            11 => Ok(NfsOpnum4::Link),
+            12 => Ok(NfsOpnum4::Lock),
+            13 => Ok(NfsOpnum4::LockT),
+            14 => Ok(NfsOpnum4::LockU),
+            15 => Ok(NfsOpnum4::Lookup),
+            16 => Ok(NfsOpnum4::LookupP),
+            17 => Ok(NfsOpnum4::NVerify),
+            18 => Ok(NfsOpnum4::Open),
+            19 => Ok(NfsOpnum4::OpenAttr),
+            20 => Ok(NfsOpnum4::OpenConfirm),
+            21 => Ok(NfsOpnum4::OpenDowngrade),
+            22 => Ok(NfsOpnum4::PutFh),
+            23 => Ok(NfsOpnum4::PutPubFh),
+            24 => Ok(NfsOpnum4::PutRootFh),
+            25 => Ok(NfsOpnum4::Read),
+            26 => Ok(NfsOpnum4::ReadDir),
+            27 => Ok(NfsOpnum4::ReadLink),
+            28 => Ok(NfsOpnum4::Remove),
+            29 => Ok(NfsOpnum4::Rename),
+            30 => Ok(NfsOpnum4::Renew),
+            31 => Ok(NfsOpnum4::RestoreFh),
+            32 => Ok(NfsOpnum4::SaveFh),
+            33 => Ok(NfsOpnum4::SecInfo),
+            34 => Ok(NfsOpnum4::SetAttr),
+            35 => Ok(NfsOpnum4::SetClientId),
+            36 => Ok(NfsOpnum4::SetClientIdConfirm),
+            37 => Ok(NfsOpnum4::Verify),
+            38 => Ok(NfsOpnum4::Write),
+            39 => Ok(NfsOpnum4::ReleaseLockOwner),
+            10044 => Ok(NfsOpnum4::Illegal),
+            _ => Err(Nfsv4Error::InvalidNfsOpnum4(v)),
+        }
+    }
 }
 
 /// RFC7531: nfs_argop4
@@ -115,6 +167,18 @@ pub enum NfsArgOp4 {
 
     /// Illegal operation.
     Illegal,
+}
+
+impl NfsArgOp4 {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        let op = NfsOpnum4::try_from(r.read_i32()?)?;
+        match op {
+            NfsOpnum4::PutPubFh => Ok(NfsArgOp4::PutPubFh),
+            _ => {
+                unimplemented!();
+            }
+        }
+    }
 }
 
 /// RFC7531: nfs_resop4
