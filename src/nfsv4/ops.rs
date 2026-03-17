@@ -8,6 +8,8 @@ pub mod create;
 pub mod delegpurge;
 pub mod delegreturn;
 pub mod getattr;
+pub mod getfh;
+pub mod link;
 pub mod lookup;
 pub mod putrootfh;
 pub mod readdir;
@@ -19,6 +21,8 @@ pub use create::*;
 pub use delegpurge::*;
 pub use delegreturn::*;
 pub use getattr::*;
+pub use getfh::*;
+pub use link::*;
 pub use lookup::*;
 pub use putrootfh::*;
 pub use readdir::*;
@@ -28,59 +32,6 @@ use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
-
-/// RFC7531: GETFH4resok
-///
-/// Successful result of the GETFH operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct GetFh4ResOk {
-    /// Returned filehandle for CURRENT_FH.
-    pub object: NfsFh4,
-}
-
-/// RFC7531: GETFH4res
-///
-/// Result of the GETFH operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum GetFh4Res {
-    /// Operation succeeded.
-    Ok(GetFh4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
-
-/// RFC7531: LINK4args
-///
-/// Arguments for the LINK operation.
-/// SAVED_FH must refer to the source object.
-/// CURRENT_FH must refer to the target directory.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Link4Args {
-    /// New name of the linked object in the target directory.
-    pub newname: Component4,
-}
-
-/// RFC7531: LINK4resok
-///
-/// Successful result of the LINK operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Link4ResOk {
-    /// Change information for the target directory.
-    pub cinfo: ChangeInfo4,
-}
-
-/// RFC7531: LINK4res
-///
-/// Result of the LINK operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Link4Res {
-    /// Operation succeeded.
-    Ok(Link4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
 
 /// RFC7531: open_to_lock_owner4
 ///
