@@ -25,12 +25,3 @@ pub struct Lookup4Res {
     /// NFS operation status.
     pub status: NfsStat4,
 }
-
-/// RFC7531: LOOKUPP4res
-///
-/// Result of the LOOKUPP operation (lookup parent directory).
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct LookupP4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
