@@ -19,7 +19,10 @@ pub mod open;
 pub mod putfh;
 pub mod putpubfh;
 pub mod putrootfh;
+pub mod read;
 pub mod readdir;
+pub mod readlink;
+pub mod remove;
 
 pub use access::*;
 pub use close::*;
@@ -39,105 +42,16 @@ pub use open::*;
 pub use putfh::*;
 pub use putpubfh::*;
 pub use putrootfh::*;
+pub use read::*;
 pub use readdir::*;
+pub use readlink::*;
+pub use remove::*;
 
 use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
-
-/// RFC7531: READ4args
-///
-/// Arguments for the READ operation.
-/// CURRENT_FH must refer to a file.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Read4Args {
-    /// State ID used for the read.
-    pub stateid: StateId4,
-
-    /// Starting offset in the file.
-    pub offset: Offset4,
-
-    /// Number of bytes to read.
-    pub count: Count4,
-}
-
-/// RFC7531: READ4resok
-///
-/// Successful result of the READ operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Read4ResOk {
-    /// Indicates end-of-file.
-    pub eof: bool,
-
-    /// Data returned by the server.
-    pub data: Vec<u8>,
-}
-
-/// RFC7531: READ4res
-///
-/// Result of the READ operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Read4Res {
-    /// Operation succeeded.
-    Ok(Read4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
-
-/// RFC7531: READLINK4resok
-///
-/// Successful result of the READLINK operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReadLink4ResOk {
-    /// Symbolic link target.
-    pub link: LinkText4,
-}
-
-/// RFC7531: READLINK4res
-///
-/// Result of the READLINK operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum ReadLink4Res {
-    /// Operation succeeded.
-    Ok(ReadLink4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
-
-/// RFC7531: REMOVE4args
-///
-/// Arguments for the REMOVE operation.
-/// CURRENT_FH must refer to the containing directory.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Remove4Args {
-    /// Name of the directory entry to remove.
-    pub target: Component4,
-}
-
-/// RFC7531: REMOVE4resok
-///
-/// Successful result of the REMOVE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Remove4ResOk {
-    /// Change information for the containing directory.
-    pub cinfo: ChangeInfo4,
-}
-
-/// RFC7531: REMOVE4res
-///
-/// Result of the REMOVE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Remove4Res {
-    /// Operation succeeded.
-    Ok(Remove4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
 
 /// RFC7531: RENAME4args
 ///
