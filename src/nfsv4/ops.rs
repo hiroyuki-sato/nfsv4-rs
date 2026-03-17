@@ -14,6 +14,7 @@ pub mod lock;
 pub mod lockt;
 pub mod locku;
 pub mod lookup;
+pub mod nverify;
 pub mod putrootfh;
 pub mod readdir;
 
@@ -30,6 +31,7 @@ pub use lock::*;
 pub use lockt::*;
 pub use locku::*;
 pub use lookup::*;
+pub use nverify::*;
 pub use putrootfh::*;
 pub use readdir::*;
 
@@ -38,28 +40,6 @@ use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
-
-/// RFC7531: NVERIFY4args
-///
-/// Arguments for the NVERIFY operation.
-/// CURRENT_FH must refer to the target object.
-///
-/// The operation succeeds only if the specified attributes
-/// do NOT match the object's attributes.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct NVerify4Args {
-    /// Attributes to compare against the object.
-    pub obj_attributes: Fattr4,
-}
-
-/// RFC7531: NVERIFY4res
-///
-/// Result of the NVERIFY operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct NVerify4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
 
 /// Share access flags used in the OPEN operation.
 pub const OPEN4_SHARE_ACCESS_READ: u32 = 0x00000001;
