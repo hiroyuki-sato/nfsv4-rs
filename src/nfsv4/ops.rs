@@ -23,6 +23,9 @@ pub mod read;
 pub mod readdir;
 pub mod readlink;
 pub mod remove;
+pub mod rename;
+pub mod renew;
+pub mod restore;
 
 pub use access::*;
 pub use close::*;
@@ -46,78 +49,15 @@ pub use read::*;
 pub use readdir::*;
 pub use readlink::*;
 pub use remove::*;
+pub use rename::*;
+pub use renew::*;
+pub use restore::*;
 
 use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
-
-/// RFC7531: RENAME4args
-///
-/// Arguments for the RENAME operation.
-/// SAVED_FH must refer to the source directory.
-/// CURRENT_FH must refer to the target directory.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Rename4Args {
-    /// Name of the source entry.
-    pub oldname: Component4,
-
-    /// New name in the target directory.
-    pub newname: Component4,
-}
-
-/// RFC7531: RENAME4resok
-///
-/// Successful result of the RENAME operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Rename4ResOk {
-    /// Change information for the source directory.
-    pub source_cinfo: ChangeInfo4,
-
-    /// Change information for the target directory.
-    pub target_cinfo: ChangeInfo4,
-}
-
-/// RFC7531: RENAME4res
-///
-/// Result of the RENAME operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum Rename4Res {
-    /// Operation succeeded.
-    Ok(Rename4ResOk),
-
-    /// Operation failed with an NFS error status.
-    Err(NfsStat4),
-}
-
-/// RFC7531: RENEW4args
-///
-/// Arguments for the RENEW operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Renew4Args {
-    /// Client identifier to renew.
-    pub clientid: ClientId4,
-}
-
-/// RFC7531: RENEW4res
-///
-/// Result of the RENEW operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Renew4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
-
-/// RFC7531: RESTOREFH4res
-///
-/// Result of the RESTOREFH operation.
-/// On success, CURRENT_FH becomes the saved filehandle.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RestoreFh4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
 
 /// RFC7531: SAVEFH4res
 ///
