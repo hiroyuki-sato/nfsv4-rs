@@ -5,6 +5,8 @@ pub mod access;
 pub mod close;
 pub mod commit;
 pub mod create;
+pub mod delegpurge;
+pub mod delegreturn;
 pub mod getattr;
 pub mod lookup;
 pub mod putrootfh;
@@ -14,6 +16,8 @@ pub use access::*;
 pub use close::*;
 pub use commit::*;
 pub use create::*;
+pub use delegpurge::*;
+pub use delegreturn::*;
 pub use getattr::*;
 pub use lookup::*;
 pub use putrootfh::*;
@@ -24,43 +28,6 @@ use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
-
-/// RFC7531: DELEGPURGE4args
-///
-/// Arguments for the DELEGPURGE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct DelegPurge4Args {
-    /// Client identifier whose delegations should be purged.
-    pub clientid: ClientId4,
-}
-
-/// RFC7531: DELEGPURGE4res
-///
-/// Result of the DELEGPURGE operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct DelegPurge4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
-
-/// RFC7531: DELEGRETURN4args
-///
-/// Arguments for the DELEGRETURN operation.
-/// CURRENT_FH must refer to the delegated file.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct DelegReturn4Args {
-    /// Delegation state identifier.
-    pub deleg_stateid: StateId4,
-}
-
-/// RFC7531: DELEGRETURN4res
-///
-/// Result of the DELEGRETURN operation.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct DelegReturn4Res {
-    /// NFS operation status.
-    pub status: NfsStat4,
-}
 
 /// RFC7531: GETFH4resok
 ///
