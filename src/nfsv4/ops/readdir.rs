@@ -38,7 +38,7 @@ impl ReadDir4Args {
             .map_err(|_| Nfsv4Error::InvalidData("expected 8 bytes".into()))?;
         let dircount = r.read_u32()?;
         let maxcount = r.read_u32()?;
-        let attr_request = r.read_array(|r| r.read_u32())?;
+        let attr_request = Bitmap4::decode(r)?;
         Ok(Self {
             cookie,
             cookieverf,
@@ -52,7 +52,7 @@ impl ReadDir4Args {
         w.write_fixed_opaque(&self.cookieverf)?;
         w.write_u32(self.dircount)?;
         w.write_u32(self.maxcount)?;
-        w.write_array(&self.attr_request, |w, v| w.write_u32(*v))?;
+        self.attr_request.encode(w)?;
         Ok(())
     }
 }

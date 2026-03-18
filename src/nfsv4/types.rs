@@ -21,7 +21,6 @@ use crate::error::Nfsv4Error;
 // RFC7531 Basic data types (selected)
 
 pub type Attrlist4 = Vec<u8>;
-pub type Bitmap4 = Vec<u32>;
 
 pub type ChangeId4 = u64;
 pub type ClientId4 = u64;
