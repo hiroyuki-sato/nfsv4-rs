@@ -1,6 +1,9 @@
 #![allow(dead_code)]
 
+mod mode4;
+
 use crate::error::Nfsv4Error;
+use crate::nfsv4::types::mode4::*;
 
 pub const FHSIZE: usize = 128;
 pub const VERIFIER_SIZE: usize = 8;
@@ -159,7 +162,6 @@ pub type ChangeId4 = u64;
 pub type ClientId4 = u64;
 pub type Count4 = u32;
 pub type Length4 = u64;
-pub type Mode4 = u32;
 
 pub type NfsCookie4 = u64;
 pub type NfsLease4 = u32;
@@ -323,24 +325,6 @@ pub struct NfsAce4 {
     /// Principal or group name the ACE applies to
     pub who: String,
 }
-
-/// Mode4 bitmask values (fattr4_mode attribute)
-
-pub const MODE4_SET_USER_ID: Mode4 = 0x800; // set user id on execution
-pub const MODE4_SET_GROUP_ID: Mode4 = 0x400; // set group id on execution
-pub const MODE4_SAVE_TEXT: Mode4 = 0x200; // save text even after use
-
-pub const MODE4_READ_OWNER: Mode4 = 0x100; // read permission: owner
-pub const MODE4_WRITE_OWNER: Mode4 = 0x080; // write permission: owner
-pub const MODE4_EXEC_OWNER: Mode4 = 0x040; // execute permission: owner
-
-pub const MODE4_READ_GROUP: Mode4 = 0x020; // read permission: group
-pub const MODE4_WRITE_GROUP: Mode4 = 0x010; // write permission: group
-pub const MODE4_EXEC_GROUP: Mode4 = 0x008; // execute permission: group
-
-pub const MODE4_READ_OTHER: Mode4 = 0x004; // read permission: other
-pub const MODE4_WRITE_OTHER: Mode4 = 0x002; // write permission: other
-pub const MODE4_EXEC_OTHER: Mode4 = 0x001; // execute permission: other
 
 /// RFC7531: specdata4
 ///
