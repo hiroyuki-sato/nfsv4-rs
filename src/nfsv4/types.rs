@@ -2,14 +2,26 @@
 #![allow(unused_imports)] // TODO: Remove this once all operations are implemented.
 
 pub mod bitmap4;
+pub mod fs_location4;
+pub mod fs_locations4;
+pub mod fsid4;
 pub mod ftype4;
 pub mod mode4;
 pub mod nfsstat4;
+pub mod settime4;
+pub mod time4;
+pub mod time_how4;
 
 pub use crate::nfsv4::types::bitmap4::*;
+pub use crate::nfsv4::types::fs_location4::*;
+pub use crate::nfsv4::types::fs_locations4::*;
+pub use crate::nfsv4::types::fsid4::*;
 pub use crate::nfsv4::types::ftype4::*;
 pub use crate::nfsv4::types::mode4::*;
 pub use crate::nfsv4::types::nfsstat4::*;
+pub use crate::nfsv4::types::settime4::*;
+pub use crate::nfsv4::types::time_how4::*;
+pub use crate::nfsv4::types::time4::*;
 
 pub const FHSIZE: usize = 128;
 pub const VERIFIER_SIZE: usize = 8;
@@ -47,49 +59,6 @@ pub type NfsFh4 = Vec<u8>;
 
 /// opaque verifier4[NFS4_VERIFIER_SIZE]
 pub type Verifier4 = [u8; VERIFIER_SIZE];
-
-/// RFC7531: nfstime4
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct NfsTime4 {
-    pub seconds: i64,
-    pub nseconds: u32,
-}
-
-/// RFC7531: time_how4
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(i32)]
-pub enum TimeHow4 {
-    SetToServerTime = 0,
-    SetToClientTime = 1,
-}
-
-/// RFC7531: settime4
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum SetTime4 {
-    SetToServerTime,
-    SetToClientTime(NfsTime4),
-}
-
-/// RFC7531: fsid4
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Fsid4 {
-    pub major: u64,
-    pub minor: u64,
-}
-
-/// RFC7531: fs_location4
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct FsLocation4 {
-    pub server: Vec<String>,
-    pub rootpath: Pathname4,
-}
-
-/// RFC7531: fs_locations4
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct FsLocations4 {
-    pub fs_root: Pathname4,
-    pub locations: Vec<FsLocation4>,
-}
 
 pub const ACL4_SUPPORT_ALLOW_ACL: u32 = 0x00000001;
 pub const ACL4_SUPPORT_DENY_ACL: u32 = 0x00000002;
