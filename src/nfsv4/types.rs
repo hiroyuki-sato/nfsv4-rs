@@ -2,10 +2,12 @@
 #![allow(unused_imports)] // TODO: Remove this once all operations are implemented.
 
 pub mod bitmap4;
+pub mod ftype4;
 pub mod mode4;
 pub mod nfsstat4;
 
 pub use crate::nfsv4::types::bitmap4::*;
+pub use crate::nfsv4::types::ftype4::*;
 pub use crate::nfsv4::types::mode4::*;
 pub use crate::nfsv4::types::nfsstat4::*;
 
@@ -15,38 +17,6 @@ pub const OTHER_SIZE: usize = 12;
 pub const OPAQUE_LIMIT: usize = 1024;
 
 use crate::error::Nfsv4Error;
-
-/// RFC7531: nfs_ftype4
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(i32)]
-pub enum Ftype4 {
-    /// NF4REG - Regular File
-    RegularFile = 1,
-
-    /// NF4DIR - Directory
-    Directory = 2,
-
-    /// NF4BLK - Special File - block device
-    BlockDevice = 3,
-
-    /// NF4CHR - Special File - character device
-    CharacterDevice = 4,
-
-    /// NF4LNK - Symbolic Link
-    SymbolicLink = 5,
-
-    /// NF4SOCK - Special File - socket
-    Socket = 6,
-
-    /// NF4FIFO - Special File - fifo
-    Fifo = 7,
-
-    /// NF4ATTRDIR - Attribute Directory
-    AttributeDirectory = 8,
-
-    /// NF4NAMEDATTR - Named Attribute
-    NamedAttribute = 9,
-}
 
 // RFC7531 Basic data types (selected)
 
