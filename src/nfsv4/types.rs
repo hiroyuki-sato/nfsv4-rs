@@ -1,9 +1,10 @@
 #![allow(dead_code)]
 
+pub mod bitmap4;
 pub mod mode4;
 pub mod nfsstat4;
 
-use crate::error::Nfsv4Error;
+pub use crate::nfsv4::types::bitmap4::*;
 pub use crate::nfsv4::types::mode4::*;
 pub use crate::nfsv4::types::nfsstat4::*;
 
@@ -11,6 +12,8 @@ pub const FHSIZE: usize = 128;
 pub const VERIFIER_SIZE: usize = 8;
 pub const OTHER_SIZE: usize = 12;
 pub const OPAQUE_LIMIT: usize = 1024;
+
+use crate::error::Nfsv4Error;
 
 /// RFC7531: nfs_ftype4
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
