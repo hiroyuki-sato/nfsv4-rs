@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![allow(unused_imports)] // TODO: Remove this once all operations are implemented.
 
 pub mod bitmap4;
 pub mod mode4;
