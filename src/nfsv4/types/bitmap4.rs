@@ -1,5 +1,10 @@
 #![allow(dead_code)]
 
+use xdr_rs::reader::XdrReader;
+use xdr_rs::writer::XdrWriter;
+
+use crate::error::Nfsv4Error;
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Bitmap4(Vec<u32>);
 
@@ -57,6 +62,16 @@ impl Bitmap4 {
 
     pub fn clear(&mut self) {
         self.0.clear();
+    }
+
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        let bits = r.read_array(|r| r.read_u32())?;
+        Ok(Self(bits))
+    }
+    // TODO: Trim trailing zero words before encoding to avoid unnecessary padding.
+    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        w.write_array(&self.0, |w, &bit| w.write_u32(bit))?;
+        Ok(())
     }
 }
 
@@ -148,5 +163,20 @@ mod tests {
 
         let raw: Vec<u32> = bitmap.into();
         assert_eq!(raw, vec![0x1, 0x2]);
+    }
+
+    #[test]
+    fn test_encode_decode() {
+        let mut bitmap = Bitmap4::new();
+        bitmap.insert(0);
+        bitmap.insert(31);
+        bitmap.insert(32);
+        bitmap.insert(63);
+        let mut w = XdrWriter::new();
+        bitmap.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded_bitmap = Bitmap4::decode(&mut r).unwrap();
+        assert_eq!(bitmap, decoded_bitmap);
     }
 }
