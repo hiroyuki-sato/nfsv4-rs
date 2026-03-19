@@ -2,6 +2,9 @@
 
 use super::*;
 
+use xdr_rs::reader::XdrReader;
+use xdr_rs::writer::XdrWriter;
+
 /// Values for fattr4_fh_expire_type
 
 /// Filehandle never expires
@@ -362,4 +365,65 @@ pub const FATTR4_MOUNTED_ON_FILEID: u32 = 55;
 pub struct Fattr4 {
     pub attrmask: Bitmap4,
     pub attr_vals: Attrlist4,
+}
+
+impl Fattr4 {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        let attrmask = Bitmap4::decode(r)?;
+        let attr_vals = r.read_opaque()?;
+        Ok(Self {
+            attrmask,
+            attr_vals,
+        })
+    }
+
+    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        self.attrmask.encode(w)?;
+        w.write_opaque(&self.attr_vals)?;
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use xdr_rs::reader::XdrReader;
+    use xdr_rs::writer::XdrWriter;
+
+    #[test]
+    fn test_fattr4_encode_decode() {
+        let mut attrmask = Bitmap4::new();
+        attrmask.insert(0);
+        attrmask.insert(31);
+        attrmask.insert(32);
+
+        let fattr = Fattr4 {
+            attrmask,
+            attr_vals: vec![0x11, 0x22, 0x33, 0x44],
+        };
+
+        let mut w = XdrWriter::new();
+        fattr.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = Fattr4::decode(&mut r).unwrap();
+
+        assert_eq!(fattr, decoded);
+    }
+
+    #[test]
+    fn test_fattr4_encode_decode_empty() {
+        let fattr = Fattr4 {
+            attrmask: Bitmap4::new(),
+            attr_vals: Vec::new(),
+        };
+
+        let mut w = XdrWriter::new();
+        fattr.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = Fattr4::decode(&mut r).unwrap();
+
+        assert_eq!(fattr, decoded);
+    }
 }
