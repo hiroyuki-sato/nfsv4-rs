@@ -215,6 +215,48 @@ impl TryFrom<i32> for NfsStat4 {
 
     fn try_from(value: i32) -> Result<Self, Self::Error> {
         match value {
+            0 => Ok(NfsStat4::Ok),
+            1 => Ok(NfsStat4::Perm),
+            2 => Ok(NfsStat4::NoEnt),
+            5 => Ok(NfsStat4::Io),
+            6 => Ok(NfsStat4::NxIo),
+            13 => Ok(NfsStat4::Access),
+            17 => Ok(NfsStat4::Exist),
+            18 => Ok(NfsStat4::XDev),
+            20 => Ok(NfsStat4::NotDir),
+            21 => Ok(NfsStat4::IsDir),
+            22 => Ok(NfsStat4::Inval),
+            27 => Ok(NfsStat4::FBig),
+            28 => Ok(NfsStat4::NoSpc),
+            30 => Ok(NfsStat4::Rofs),
+            31 => Ok(NfsStat4::Mlink),
+            63 => Ok(NfsStat4::NameTooLong),
+            66 => Ok(NfsStat4::NotEmpty),
+            69 => Ok(NfsStat4::Dquot),
+            70 => Ok(NfsStat4::Stale),
+            10001 => Ok(NfsStat4::BadHandle),
+            10003 => Ok(NfsStat4::BadCookie),
+            10004 => Ok(NfsStat4::NotSupp),
+            10005 => Ok(NfsStat4::TooSmall),
+            10006 => Ok(NfsStat4::ServerFault),
+            10007 => Ok(NfsStat4::BadType),
+            10008 => Ok(NfsStat4::Delay),
+            10009 => Ok(NfsStat4::Same),
+            10010 => Ok(NfsStat4::Denied),
+            10011 => Ok(NfsStat4::Expired),
+            10012 => Ok(NfsStat4::Locked),
+            10013 => Ok(NfsStat4::Grace),
+            10014 => Ok(NfsStat4::FhExpired),
+            10015 => Ok(NfsStat4::ShareDenied),
+            10016 => Ok(NfsStat4::WrongSec),
+            10017 => Ok(NfsStat4::ClidInUse),
+            10018 => Ok(NfsStat4::Resource),
+            10019 => Ok(NfsStat4::Moved),
+            10020 => Ok(NfsStat4::NoFileHandle),
+            10021 => Ok(NfsStat4::MinorVersMismatch),
+            10022 => Ok(NfsStat4::StaleClientId),
+            10023 => Ok(NfsStat4::StaleStateId),
+            10024 => Ok(NfsStat4::OldStateId),
             10025 => Ok(NfsStat4::BadStateId),
             10026 => Ok(NfsStat4::BadSeqId),
             10027 => Ok(NfsStat4::NotSame),
@@ -261,6 +303,122 @@ mod tests {
 
     #[test]
     fn test_fstat4_try_from() {
+        assert!(matches!(NfsStat4::try_from(0).unwrap(), NfsStat4::Ok));
+        assert!(matches!(NfsStat4::try_from(1).unwrap(), NfsStat4::Perm));
+        assert!(matches!(NfsStat4::try_from(2).unwrap(), NfsStat4::NoEnt));
+        assert!(matches!(NfsStat4::try_from(5).unwrap(), NfsStat4::Io));
+        assert!(matches!(NfsStat4::try_from(6).unwrap(), NfsStat4::NxIo));
+        assert!(matches!(NfsStat4::try_from(13).unwrap(), NfsStat4::Access));
+        assert!(matches!(NfsStat4::try_from(17).unwrap(), NfsStat4::Exist));
+        assert!(matches!(NfsStat4::try_from(18).unwrap(), NfsStat4::XDev));
+        assert!(matches!(NfsStat4::try_from(20).unwrap(), NfsStat4::NotDir));
+        assert!(matches!(NfsStat4::try_from(21).unwrap(), NfsStat4::IsDir));
+        assert!(matches!(NfsStat4::try_from(22).unwrap(), NfsStat4::Inval));
+        assert!(matches!(NfsStat4::try_from(27).unwrap(), NfsStat4::FBig));
+        assert!(matches!(NfsStat4::try_from(28).unwrap(), NfsStat4::NoSpc));
+        assert!(matches!(NfsStat4::try_from(30).unwrap(), NfsStat4::Rofs));
+        assert!(matches!(NfsStat4::try_from(31).unwrap(), NfsStat4::Mlink));
+        assert!(matches!(
+            NfsStat4::try_from(63).unwrap(),
+            NfsStat4::NameTooLong
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(66).unwrap(),
+            NfsStat4::NotEmpty
+        ));
+        assert!(matches!(NfsStat4::try_from(69).unwrap(), NfsStat4::Dquot));
+        assert!(matches!(NfsStat4::try_from(70).unwrap(), NfsStat4::Stale));
+
+        assert!(matches!(
+            NfsStat4::try_from(10001).unwrap(),
+            NfsStat4::BadHandle
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10003).unwrap(),
+            NfsStat4::BadCookie
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10004).unwrap(),
+            NfsStat4::NotSupp
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10005).unwrap(),
+            NfsStat4::TooSmall
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10006).unwrap(),
+            NfsStat4::ServerFault
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10007).unwrap(),
+            NfsStat4::BadType
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10008).unwrap(),
+            NfsStat4::Delay
+        ));
+        assert!(matches!(NfsStat4::try_from(10009).unwrap(), NfsStat4::Same));
+        assert!(matches!(
+            NfsStat4::try_from(10010).unwrap(),
+            NfsStat4::Denied
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10011).unwrap(),
+            NfsStat4::Expired
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10012).unwrap(),
+            NfsStat4::Locked
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10013).unwrap(),
+            NfsStat4::Grace
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10014).unwrap(),
+            NfsStat4::FhExpired
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10015).unwrap(),
+            NfsStat4::ShareDenied
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10016).unwrap(),
+            NfsStat4::WrongSec
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10017).unwrap(),
+            NfsStat4::ClidInUse
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10018).unwrap(),
+            NfsStat4::Resource
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10019).unwrap(),
+            NfsStat4::Moved
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10020).unwrap(),
+            NfsStat4::NoFileHandle
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10021).unwrap(),
+            NfsStat4::MinorVersMismatch
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10022).unwrap(),
+            NfsStat4::StaleClientId
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10023).unwrap(),
+            NfsStat4::StaleStateId
+        ));
+        assert!(matches!(
+            NfsStat4::try_from(10024).unwrap(),
+            NfsStat4::OldStateId
+        ));
+
         assert!(matches!(
             NfsStat4::try_from(10025).unwrap(),
             NfsStat4::BadStateId
