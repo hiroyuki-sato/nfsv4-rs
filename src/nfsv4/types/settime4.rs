@@ -6,5 +6,5 @@ use super::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SetTime4 {
     SetToServerTime,
-    SetToClientTime(NfsTime4),
+    SetToClientTime(Time4),
 }
