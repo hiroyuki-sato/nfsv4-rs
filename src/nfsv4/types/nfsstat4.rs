@@ -2,6 +2,9 @@
 
 use crate::nfsv4::types::Nfsv4Error;
 
+use xdr_rs::reader::XdrReader;
+use xdr_rs::writer::XdrWriter;
+
 /// RFC7531: nfsstat4 (partial)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(i32)]
@@ -113,6 +116,17 @@ impl TryFrom<i32> for NfsStat4 {
     }
 }
 
+impl NfsStat4 {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        let value = r.read_i32()?;
+        Self::try_from(value)
+    }
+    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        w.write_i32(*self as i32)?;
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -215,5 +229,16 @@ mod tests {
             NfsStat4::try_from(10048).unwrap(),
             NfsStat4::CbPathDown
         ));
+    }
+
+    #[test]
+    fn test_encode_decode() {
+        let status = NfsStat4::BadStateId;
+        let mut w = XdrWriter::new();
+        status.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded_status = NfsStat4::decode(&mut r).unwrap();
+        assert_eq!(status, decoded_status);
     }
 }
