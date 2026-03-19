@@ -42,5 +42,5 @@ pub enum Rename4Res {
     Ok(Rename4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

@@ -25,5 +25,5 @@ pub enum ReadLink4Res {
     Ok(ReadLink4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

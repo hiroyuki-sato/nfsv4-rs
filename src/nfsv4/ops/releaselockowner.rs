@@ -22,5 +22,5 @@ pub struct ReleaseLockOwner4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ReleaseLockOwner4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }

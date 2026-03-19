@@ -291,7 +291,7 @@ pub enum Open4Res {
     Ok(Open4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }
 
 /// RFC7531: OPENATTR4args
@@ -311,7 +311,7 @@ pub struct OpenAttr4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OpenAttr4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }
 
 /// RFC7531: OPEN_CONFIRM4args
@@ -344,7 +344,7 @@ pub enum OpenConfirm4Res {
     Ok(OpenConfirm4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }
 
 /// RFC7531: OPEN_DOWNGRADE4args
@@ -383,5 +383,5 @@ pub enum OpenDowngrade4Res {
     Ok(OpenDowngrade4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

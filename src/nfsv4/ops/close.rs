@@ -28,5 +28,5 @@ pub enum Close4Res {
     Ok(StateId4),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

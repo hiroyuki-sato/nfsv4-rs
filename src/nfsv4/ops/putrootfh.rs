@@ -21,7 +21,7 @@ use crate::nfsv4::types::*;
 //
 //    struct PUTROOTFH4res {
 //            /* CURRENT_FH: root fh */
-//            nfsstat4        status;
+//            stat4        status;
 //    };
 //
 // 16.22.4.  DESCRIPTION
@@ -46,13 +46,13 @@ use crate::nfsv4::types::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PutRootFh4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }
 
 impl PutRootFh4Res {
     pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
         Ok(Self {
-            status: NfsStat4::try_from(r.read_i32()?)?,
+            status: Stat4::try_from(r.read_i32()?)?,
         })
     }
     pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
@@ -68,7 +68,7 @@ mod tests {
     #[test]
     fn test_putrootfh4res_encode_decode() {
         let res = PutRootFh4Res {
-            status: NfsStat4::BadStateId,
+            status: Stat4::BadStateId,
         };
 
         let mut w = XdrWriter::new();

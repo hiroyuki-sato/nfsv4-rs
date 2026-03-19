@@ -8,8 +8,8 @@ pub mod fs_locations4;
 pub mod fsid4;
 pub mod ftype4;
 pub mod mode4;
-pub mod nfsstat4;
 pub mod settime4;
+pub mod stat4;
 pub mod time4;
 pub mod time_how4;
 
@@ -20,8 +20,8 @@ pub use crate::nfsv4::types::fs_locations4::*;
 pub use crate::nfsv4::types::fsid4::*;
 pub use crate::nfsv4::types::ftype4::*;
 pub use crate::nfsv4::types::mode4::*;
-pub use crate::nfsv4::types::nfsstat4::*;
 pub use crate::nfsv4::types::settime4::*;
+pub use crate::nfsv4::types::stat4::*;
 pub use crate::nfsv4::types::time_how4::*;
 pub use crate::nfsv4::types::time4::*;
 

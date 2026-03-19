@@ -26,5 +26,5 @@ pub struct NVerify4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NVerify4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }

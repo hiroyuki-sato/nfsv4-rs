@@ -68,5 +68,5 @@ pub enum Create4Res {
     Ok(Create4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

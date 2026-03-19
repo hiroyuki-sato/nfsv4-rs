@@ -83,5 +83,5 @@ pub enum SecInfo4Res {
     Ok(SecInfo4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

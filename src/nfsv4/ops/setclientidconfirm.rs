@@ -25,5 +25,5 @@ pub struct SetClientIdConfirm4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetClientIdConfirm4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }

@@ -29,5 +29,5 @@ pub enum LockU4Res {
     Ok(StateId4),
 
     /// Other NFS error.
-    Err(NfsStat4),
+    Err(Stat4),
 }

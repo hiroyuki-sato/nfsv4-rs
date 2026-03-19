@@ -23,5 +23,5 @@ pub struct Lookup4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Lookup4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }

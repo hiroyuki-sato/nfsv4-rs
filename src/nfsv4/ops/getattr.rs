@@ -57,21 +57,21 @@ pub enum GetAttr4Res {
     Ok(GetAttr4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }
 
 impl GetAttr4Res {
     pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
-        let status = NfsStat4::decode(r)?;
+        let status = Stat4::decode(r)?;
         match status {
-            NfsStat4::Ok => Ok(Self::Ok(GetAttr4ResOk::decode(r)?)),
+            Stat4::Ok => Ok(Self::Ok(GetAttr4ResOk::decode(r)?)),
             err => Ok(Self::Err(err)),
         }
     }
     pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
         match self {
             Self::Ok(ok) => {
-                NfsStat4::Ok.encode(w)?;
+                Stat4::Ok.encode(w)?;
                 ok.encode(w)?;
             }
             Self::Err(err) => {
@@ -189,7 +189,7 @@ mod tests {
 
     #[test]
     fn test_getattr4res_err_encode_decode() {
-        let res = GetAttr4Res::Err(NfsStat4::BadStateId);
+        let res = GetAttr4Res::Err(Stat4::BadStateId);
 
         let mut w = XdrWriter::new();
         res.encode(&mut w).unwrap();

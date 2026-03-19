@@ -25,5 +25,5 @@ pub enum GetFh4Res {
     Ok(GetFh4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

@@ -26,7 +26,7 @@ pub struct SetAttr4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetAttr4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 
     /// Bitmap of attributes successfully set.
     pub attrsset: Bitmap4,

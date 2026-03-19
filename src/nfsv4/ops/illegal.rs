@@ -14,5 +14,5 @@ use crate::nfsv4::types::*;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Illegal4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }

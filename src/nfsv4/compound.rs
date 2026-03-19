@@ -248,7 +248,7 @@ pub struct Compound4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Compound4Res {
     /// Final status of the COMPOUND request.
-    pub status: NfsStat4,
+    pub status: Stat4,
 
     /// Tag echoed back by the server.
     pub tag: String,

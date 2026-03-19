@@ -32,7 +32,7 @@ pub enum CbGetAttr4Res {
     Ok(CbGetAttr4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }
 
 /// RFC7531: CB_RECALL4args
@@ -56,7 +56,7 @@ pub struct CbRecall4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CbRecall4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }
 
 /// RFC7531: CB_ILLEGAL4res
@@ -65,7 +65,7 @@ pub struct CbRecall4Res {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CbIllegal4Res {
     /// NFS operation status.
-    pub status: NfsStat4,
+    pub status: Stat4,
 }
 
 /// RFC7531: nfs_cb_opnum4
@@ -125,7 +125,7 @@ pub struct CbCompound4Args {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CbCompound4Res {
     /// Final status of the callback COMPOUND request.
-    pub status: NfsStat4,
+    pub status: Stat4,
 
     /// Tag echoed back in the response.
     pub tag: String,

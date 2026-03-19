@@ -37,5 +37,5 @@ pub enum Commit4Res {
     Ok(Commit4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

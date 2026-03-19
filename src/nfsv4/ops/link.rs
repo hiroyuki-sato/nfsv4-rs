@@ -36,5 +36,5 @@ pub enum Link4Res {
     Ok(Link4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

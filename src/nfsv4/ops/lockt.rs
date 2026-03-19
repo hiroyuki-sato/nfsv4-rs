@@ -32,5 +32,5 @@ pub enum LockT4Res {
     Denied(Lock4Denied),
 
     /// Other NFS error.
-    Err(NfsStat4),
+    Err(Stat4),
 }

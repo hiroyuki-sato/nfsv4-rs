@@ -41,5 +41,5 @@ pub enum Access4Res {
     Ok(Access4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

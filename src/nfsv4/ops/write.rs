@@ -66,5 +66,5 @@ pub enum Write4Res {
     Ok(Write4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

@@ -35,5 +35,5 @@ pub enum Remove4Res {
     Ok(Remove4ResOk),
 
     /// Operation failed with an NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

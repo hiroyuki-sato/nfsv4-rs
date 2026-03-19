@@ -46,5 +46,5 @@ pub enum SetClientId4Res {
     ClientIdInUse(ClientAddr4),
 
     /// Operation failed with another NFS error status.
-    Err(NfsStat4),
+    Err(Stat4),
 }

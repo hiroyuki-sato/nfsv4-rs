@@ -69,7 +69,7 @@ pub type Fattr4LeaseTime = NfsLease4;
 
 /// RFC7531: fattr4_rdattr_error
 /// Error value returned when attribute retrieval fails.
-pub type Fattr4RdAttrError = NfsStat4;
+pub type Fattr4RdAttrError = Stat4;
 
 /// RFC7531: fattr4_acl
 /// Access control list attribute.
