@@ -19,6 +19,7 @@ pub enum Nfsv4Error {
     InvalidData(String),
     InvalidNfsStatus(i32),
     InvalidNfsFiletype(i32),
+    InvalidTimeHow4(i32),
 }
 
 impl From<XdrError> for Nfsv4Error {
