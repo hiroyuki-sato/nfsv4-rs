@@ -52,6 +52,27 @@ pub enum NfsOpnum4 {
     Write = 38,
     ReleaseLockOwner = 39,
 
+    /// NFSv4.1
+    BackchannelCtl = 40,
+    BindConnToSession = 41,
+    ExchangeId = 42,
+    CreateSession = 43,
+    DestroySession = 44,
+    FreeStateId = 45,
+    GetDirDelegation = 46,
+    GetDeviceInfo = 47,
+    GetDeviceList = 48,
+    LayoutCommit = 49,
+    LayoutGet = 50,
+    LayoutReturn = 51,
+    SecInfoNoName = 52,
+    Sequence = 53,
+    SetSsv = 54,
+    TestStateId = 55,
+    WantDelegation = 56,
+    DestroyClientId = 57,
+    ReclaimComplete = 58,
+
     /// Returned when an undefined operation is encountered.
     Illegal = 10044,
 }
@@ -99,6 +120,26 @@ impl TryFrom<i32> for NfsOpnum4 {
             38 => Ok(NfsOpnum4::Write),
             39 => Ok(NfsOpnum4::ReleaseLockOwner),
             10044 => Ok(NfsOpnum4::Illegal),
+            // NFSv4.1
+            40 => Ok(NfsOpnum4::BackchannelCtl),
+            41 => Ok(NfsOpnum4::BindConnToSession),
+            42 => Ok(NfsOpnum4::ExchangeId),
+            43 => Ok(NfsOpnum4::CreateSession),
+            44 => Ok(NfsOpnum4::DestroySession),
+            45 => Ok(NfsOpnum4::FreeStateId),
+            46 => Ok(NfsOpnum4::GetDirDelegation),
+            47 => Ok(NfsOpnum4::GetDeviceInfo),
+            48 => Ok(NfsOpnum4::GetDeviceList),
+            49 => Ok(NfsOpnum4::LayoutCommit),
+            50 => Ok(NfsOpnum4::LayoutGet),
+            51 => Ok(NfsOpnum4::LayoutReturn),
+            52 => Ok(NfsOpnum4::SecInfoNoName),
+            53 => Ok(NfsOpnum4::Sequence),
+            54 => Ok(NfsOpnum4::SetSsv),
+            55 => Ok(NfsOpnum4::TestStateId),
+            56 => Ok(NfsOpnum4::WantDelegation),
+            57 => Ok(NfsOpnum4::DestroyClientId),
+            58 => Ok(NfsOpnum4::ReclaimComplete),
             _ => Err(Nfsv4Error::InvalidNfsOpnum4(v)),
         }
     }
@@ -165,6 +206,27 @@ pub enum NfsArgOp4 {
     Verify(Verify4Args),
     Write(Write4Args),
     ReleaseLockOwner(ReleaseLockOwner4Args),
+
+    // NFSv4.1
+    // BackchannelCtl(BackchannelCtl4Args), // TODO
+    // BindConnToSession(BindConnToSession4Args),
+    // ExchangeId(ExchangeId4Args), // TODO
+    CreateSession(CreateSession4Args),
+    DestroySession(DestroySession4Args),
+    FreeStateId(FreeStateId4Args),
+    GetDirDelegation(GetDirDelegation4Args),
+    GetDeviceInfo(GetDeviceInfo4Args),
+    GetDeviceList(GetDeviceList4Args),
+    LayoutCommit(LayoutCommit4Args),
+    LayoutGet(LayoutGet4Args),
+    LayoutReturn(LayoutReturn4Args),
+    SecInfoNoName(SecInfoNoName4Args),
+    Sequence(Sequence4Args),
+    SetSsv(SetSsv4Args),
+    TestStateId(TestStateId4Args),
+    WantDelegation(WantDelegation4Args),
+    DestroyClientId(DestroyClientId4Args),
+    ReclaimComplete(ReclaimComplete4Args),
 
     /// Illegal operation.
     Illegal,
