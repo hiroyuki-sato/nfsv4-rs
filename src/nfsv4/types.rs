@@ -2,26 +2,52 @@
 #![allow(unused_imports)] // TODO: Remove this once all operations are implemented.
 
 pub mod bitmap4;
+pub mod change_policy4;
+pub mod device_addr4;
 pub mod fattr4;
 pub mod fs_location4;
 pub mod fs_locations4;
 pub mod fsid4;
 pub mod ftype4;
+pub mod layout4;
+pub mod layout_content4;
+pub mod layouthint4;
+pub mod layoutiomode4;
+pub mod layouttype4;
+pub mod layoutupdate4;
+pub mod mdsthreshold4;
 pub mod mode4;
+pub mod netaddr4;
+pub mod nfs_impl_id4;
 pub mod settime4;
 pub mod stat4;
+pub mod state_owner4;
+pub mod threshold_item4;
 pub mod time4;
 pub mod time_how4;
 
 pub use crate::nfsv4::types::bitmap4::*;
+pub use crate::nfsv4::types::change_policy4::*;
+pub use crate::nfsv4::types::device_addr4::*;
 pub use crate::nfsv4::types::fattr4::*;
 pub use crate::nfsv4::types::fs_location4::*;
 pub use crate::nfsv4::types::fs_locations4::*;
 pub use crate::nfsv4::types::fsid4::*;
 pub use crate::nfsv4::types::ftype4::*;
+pub use crate::nfsv4::types::layout_content4::*;
+pub use crate::nfsv4::types::layout4::*;
+pub use crate::nfsv4::types::layouthint4::*;
+pub use crate::nfsv4::types::layoutiomode4::*;
+pub use crate::nfsv4::types::layouttype4::*;
+pub use crate::nfsv4::types::layoutupdate4::*;
+pub use crate::nfsv4::types::mdsthreshold4::*;
 pub use crate::nfsv4::types::mode4::*;
+pub use crate::nfsv4::types::netaddr4::*;
+pub use crate::nfsv4::types::nfs_impl_id4::*;
 pub use crate::nfsv4::types::settime4::*;
 pub use crate::nfsv4::types::stat4::*;
+pub use crate::nfsv4::types::state_owner4::*;
+pub use crate::nfsv4::types::threshold_item4::*;
 pub use crate::nfsv4::types::time_how4::*;
 pub use crate::nfsv4::types::time4::*;
 
@@ -288,3 +314,33 @@ pub const ACCESS4_MODIFY: u32 = 0x00000004;
 pub const ACCESS4_EXTEND: u32 = 0x00000008;
 pub const ACCESS4_DELETE: u32 = 0x00000010;
 pub const ACCESS4_EXECUTE: u32 = 0x00000020;
+
+/// RFC8881: NFS4_SESSIONID_SIZE
+///
+/// Fixed size of a session identifier in NFSv4.1.
+pub const SESSIONID_SIZE: usize = 16;
+
+/// RFC8881: sequenceid4
+///
+/// Sequence number used for session-related operations
+/// such as EXCHANGE_ID, CREATE_SESSION, SEQUENCE, and CB_SEQUENCE.
+pub type SequenceId4 = u32;
+
+/// RFC8881: sessionid4
+///
+/// Fixed-size session identifier used in NFSv4.1 sessions.
+pub type SessionId4 = [u8; SESSIONID_SIZE];
+
+/// RFC8881: slotid4
+///
+/// Slot identifier used for session-related operations
+/// such as SEQUENCE and CB_SEQUENCE.
+pub type SlotId4 = u32;
+
+/// RFC8881 Section 3.3.14: deviceid4
+///
+/// Fixed-size identifier for a device (16 bytes).
+pub const NFS4_DEVICEID4_SIZE: usize = 16;
+
+/// opaque deviceid4[NFS4_DEVICEID4_SIZE]
+pub type DeviceId4 = [u8; NFS4_DEVICEID4_SIZE];
