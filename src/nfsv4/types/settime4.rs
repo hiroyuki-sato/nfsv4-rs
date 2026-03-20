@@ -5,7 +5,7 @@ use xdr_rs::writer::XdrWriter;
 
 use crate::nfsv4::types::Nfsv4Error;
 use crate::nfsv4::types::time_how4::TimeHow4;
-use crate::nfsv4::types::time4::Time4;
+use crate::nfsv4::types::time4::NfsTime4;
 
 /// RFC7531: settime4
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -20,7 +20,7 @@ impl SetTime4 {
         match TimeHow4::try_from(how)? {
             TimeHow4::SetToServerTime => Ok(SetTime4::SetToServerTime),
             TimeHow4::SetToClientTime => {
-                let time = Time4::decode(r)?;
+                let time = NfsTime4::decode(r)?;
                 Ok(SetTime4::SetToClientTime(time))
             }
         }
@@ -56,7 +56,7 @@ mod tests {
 
     #[test]
     fn test_settime4_client_time_encode_decode() {
-        let val = SetTime4::SetToClientTime(Time4 {
+        let val = SetTime4::SetToClientTime(NfsTime4 {
             seconds: 123,
             nseconds: 456,
         });
