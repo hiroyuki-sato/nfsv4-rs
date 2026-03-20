@@ -11,7 +11,7 @@ use crate::nfsv4::types::time4::Time4;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SetTime4 {
     SetToServerTime,
-    SetToClientTime(Time4),
+    SetToClientTime(NfsTime4),
 }
 
 impl SetTime4 {

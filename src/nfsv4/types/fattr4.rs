@@ -217,7 +217,7 @@ pub type Fattr4RawDev = SpecData4;
 
 /// RFC7531: fattr4_time_access
 /// Last access time.
-/// Represented directly as `Time4` in Rust.
+/// Represented directly as `NfsTime4` in Rust.
 
 /// RFC7531: fattr4_time_access_set
 /// Used when setting access time.
@@ -225,23 +225,23 @@ pub type Fattr4RawDev = SpecData4;
 
 /// RFC7531: fattr4_time_backup
 /// Backup time attribute.
-/// Represented directly as `Time4` in Rust.
+/// Represented directly as `NfsTime4` in Rust.
 
 /// RFC7531: fattr4_time_create
 /// File creation time.
-/// Represented directly as `Time4` in Rust.
+/// Represented directly as `NfsTime4` in Rust.
 
 /// RFC7531: fattr4_time_delta
 /// Minimum timestamp granularity.
-/// Represented directly as `Time4` in Rust.
+/// Represented directly as `NfsTime4` in Rust.
 
 /// RFC7531: fattr4_time_metadata
 /// Last metadata change time.
-/// Represented directly as `Time4` in Rust.
+/// Represented directly as `NfsTime4` in Rust.
 
 /// RFC7531: fattr4_time_modify
 /// Last modification time.
-/// Represented directly as `Time4` in Rust.
+/// Represented directly as `NfsTime4` in Rust.
 
 /// RFC7531: fattr4_time_modify_set
 /// Used when setting modification time.
