@@ -38,3 +38,50 @@ impl ClientOwner4 {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_clientowner4_encode_decode() {
+        let original = ClientOwner4 {
+            co_verifier: [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88],
+            co_ownerid: vec![0xaa, 0xbb, 0xcc, 0xdd],
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = ClientOwner4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_clientowner4_encode_decode_empty_ownerid() {
+        let original = ClientOwner4 {
+            co_verifier: [0; VERIFIER_SIZE],
+            co_ownerid: Vec::new(),
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = ClientOwner4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_clientowner4_decode_truncated_verifier() {
+        let buf = [0x11, 0x22, 0x33, 0x44]; // less than VERIFIER_SIZE
+
+        let mut r = XdrReader::new(&buf);
+        let err = ClientOwner4::decode(&mut r).unwrap_err();
+
+        assert!(matches!(err, Nfsv4Error::Xdr(_)));
+    }
+}
