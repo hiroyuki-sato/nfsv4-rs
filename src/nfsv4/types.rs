@@ -20,6 +20,7 @@ pub mod mdsthreshold4;
 pub mod mode4;
 pub mod netaddr4;
 pub mod nfs_impl_id4;
+pub mod secoid4;
 pub mod server_owner4;
 pub mod settime4;
 pub mod stat4;
@@ -47,6 +48,7 @@ pub use crate::nfsv4::types::mdsthreshold4::*;
 pub use crate::nfsv4::types::mode4::*;
 pub use crate::nfsv4::types::netaddr4::*;
 pub use crate::nfsv4::types::nfs_impl_id4::*;
+pub use crate::nfsv4::types::secoid4::*;
 pub use crate::nfsv4::types::server_owner4::*;
 pub use crate::nfsv4::types::settime4::*;
 pub use crate::nfsv4::types::stat4::*;
@@ -80,7 +82,6 @@ pub type SeqId4 = u32;
 
 pub type NfsLockId4 = u64;
 
-pub type SecOid4 = Vec<u8>;
 pub type LinkText4 = Vec<u8>;
 
 pub type Component4 = String;

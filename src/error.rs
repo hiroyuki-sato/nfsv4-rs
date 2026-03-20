@@ -22,6 +22,7 @@ pub enum Nfsv4Error {
     InvalidTimeHow4(i32),
     InvalidLayoutType(i32),
     InvalidLayoutIOMode(i32),
+    InvalidStateProtectHow(i32),
 }
 
 impl From<XdrError> for Nfsv4Error {
