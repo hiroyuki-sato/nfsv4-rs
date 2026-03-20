@@ -4,8 +4,8 @@ use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
 use crate::nfsv4::types::Nfsv4Error;
+use crate::nfsv4::types::nfstime4::NfsTime4;
 use crate::nfsv4::types::time_how4::TimeHow4;
-use crate::nfsv4::types::time4::NfsTime4;
 
 /// RFC7531: settime4
 #[derive(Debug, Clone, PartialEq, Eq)]
