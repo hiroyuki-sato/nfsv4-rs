@@ -2,6 +2,7 @@
 
 use crate::nfsv4::types::Nfsv4Error;
 
+use xdr_rs::XdrError;
 use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
@@ -13,14 +14,21 @@ pub struct NfsTime4 {
 }
 
 impl NfsTime4 {
-    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+    pub fn decode_xdr(r: &mut XdrReader) -> Result<Self, XdrError> {
         let seconds = r.read_i64()?;
         let nseconds = r.read_u32()?;
         Ok(Self { seconds, nseconds })
     }
-    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        Ok(Self::decode_xdr(r)?)
+    }
+    pub fn encode_xdr(&self, w: &mut XdrWriter) -> Result<(), XdrError> {
         w.write_i64(self.seconds)?;
         w.write_u32(self.nseconds)?;
+        Ok(())
+    }
+    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        self.encode_xdr(w)?;
         Ok(())
     }
 }

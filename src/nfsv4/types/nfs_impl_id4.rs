@@ -3,6 +3,7 @@
 use crate::nfsv4::types::NfsTime4;
 use crate::nfsv4::types::Nfsv4Error;
 
+use xdr_rs::XdrError;
 use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
@@ -22,10 +23,10 @@ pub struct NfsImplId4 {
 }
 
 impl NfsImplId4 {
-    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+    pub fn decode_xdr(r: &mut XdrReader) -> Result<Self, XdrError> {
         let nii_domain = r.read_string()?;
         let nii_name = r.read_string()?;
-        let nii_date = NfsTime4::decode(r)?;
+        let nii_date = NfsTime4::decode_xdr(r)?;
         Ok(Self {
             nii_domain,
             nii_name,
@@ -33,10 +34,19 @@ impl NfsImplId4 {
         })
     }
 
-    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        Ok(Self::decode_xdr(r)?)
+    }
+
+    pub fn encode_xdr(&self, w: &mut XdrWriter) -> Result<(), XdrError> {
         w.write_string(&self.nii_domain)?;
         w.write_string(&self.nii_name)?;
-        self.nii_date.encode(w)?;
+        self.nii_date.encode_xdr(w)?;
+        Ok(())
+    }
+
+    pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        self.encode_xdr(w)?;
         Ok(())
     }
 }
