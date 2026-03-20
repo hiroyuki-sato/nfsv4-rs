@@ -3,6 +3,7 @@
 
 pub mod bitmap4;
 pub mod change_policy4;
+pub mod client_owner4;
 pub mod device_addr4;
 pub mod fattr4;
 pub mod fs_location4;
@@ -19,6 +20,7 @@ pub mod mdsthreshold4;
 pub mod mode4;
 pub mod netaddr4;
 pub mod nfs_impl_id4;
+pub mod server_owner4;
 pub mod settime4;
 pub mod stat4;
 pub mod state_owner4;
@@ -28,6 +30,7 @@ pub mod time_how4;
 
 pub use crate::nfsv4::types::bitmap4::*;
 pub use crate::nfsv4::types::change_policy4::*;
+pub use crate::nfsv4::types::client_owner4::*;
 pub use crate::nfsv4::types::device_addr4::*;
 pub use crate::nfsv4::types::fattr4::*;
 pub use crate::nfsv4::types::fs_location4::*;
@@ -44,6 +47,7 @@ pub use crate::nfsv4::types::mdsthreshold4::*;
 pub use crate::nfsv4::types::mode4::*;
 pub use crate::nfsv4::types::netaddr4::*;
 pub use crate::nfsv4::types::nfs_impl_id4::*;
+pub use crate::nfsv4::types::server_owner4::*;
 pub use crate::nfsv4::types::settime4::*;
 pub use crate::nfsv4::types::stat4::*;
 pub use crate::nfsv4::types::state_owner4::*;
