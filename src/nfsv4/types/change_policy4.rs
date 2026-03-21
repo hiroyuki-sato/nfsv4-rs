@@ -32,3 +32,65 @@ impl ChangePolicy4 {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_changepolicy4_encode_decode() {
+        let original = ChangePolicy4 {
+            cp_major: 0x1122_3344_5566_7788,
+            cp_minor: 0x8877_6655_4433_2211,
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = ChangePolicy4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_changepolicy4_zero_values() {
+        let original = ChangePolicy4 {
+            cp_major: 0,
+            cp_minor: 0,
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = ChangePolicy4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_changepolicy4_max_values() {
+        let original = ChangePolicy4 {
+            cp_major: u64::MAX,
+            cp_minor: u64::MAX,
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = ChangePolicy4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_changepolicy4_decode_truncated() {
+        let buf = [0x11, 0x22, 0x33, 0x44]; // less than 16 bytes
+        let mut r = XdrReader::new(&buf);
+
+        let err = ChangePolicy4::decode(&mut r).unwrap_err();
+        assert!(matches!(err, Nfsv4Error::Xdr(_)));
+    }
+}
