@@ -50,3 +50,86 @@ impl NfsImplId4 {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_nfsimplid4_encode_decode() {
+        let original = NfsImplId4 {
+            nii_domain: "example.com".to_string(),
+            nii_name: "nfsv4-rs".to_string(),
+            nii_date: NfsTime4 {
+                seconds: 1_700_000_000,
+                nseconds: 123_456_789,
+            },
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = NfsImplId4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_nfsimplid4_encode_decode_xdr() {
+        let original = NfsImplId4 {
+            nii_domain: "example.org".to_string(),
+            nii_name: "server-impl".to_string(),
+            nii_date: NfsTime4 {
+                seconds: 42,
+                nseconds: 999,
+            },
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode_xdr(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = NfsImplId4::decode_xdr(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_nfsimplid4_empty_strings() {
+        let original = NfsImplId4 {
+            nii_domain: String::new(),
+            nii_name: String::new(),
+            nii_date: NfsTime4 {
+                seconds: 0,
+                nseconds: 0,
+            },
+        };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = NfsImplId4::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_nfsimplid4_decode_xdr_truncated() {
+        let buf = [0x00, 0x00, 0x00, 0x03, b'a', b'b'];
+        let mut r = XdrReader::new(&buf);
+
+        let err = NfsImplId4::decode_xdr(&mut r).unwrap_err();
+        let _ = err;
+    }
+
+    #[test]
+    fn test_nfsimplid4_decode_truncated() {
+        let buf = [0x00, 0x00, 0x00, 0x03, b'a', b'b'];
+        let mut r = XdrReader::new(&buf);
+
+        let err = NfsImplId4::decode(&mut r).unwrap_err();
+        assert!(matches!(err, Nfsv4Error::Xdr(_)));
+    }
+}
