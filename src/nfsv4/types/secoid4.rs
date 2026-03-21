@@ -10,6 +10,10 @@ use crate::nfsv4::types::Nfsv4Error;
 pub struct SecOid4(Vec<u8>);
 
 impl SecOid4 {
+    pub fn new(v: Vec<u8>) -> Self {
+        Self(v)
+    }
+
     pub fn decode_xdr(r: &mut XdrReader) -> Result<Self, XdrError> {
         Ok(Self(r.read_opaque()?))
     }
