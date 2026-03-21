@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 
-use xdr_rs::XdrError;
 use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
@@ -14,21 +13,12 @@ impl SecOid4 {
         Self(v)
     }
 
-    pub fn decode_xdr(r: &mut XdrReader) -> Result<Self, XdrError> {
+    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
         Ok(Self(r.read_opaque()?))
     }
 
-    pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
-        Ok(Self::decode_xdr(r)?)
-    }
-
-    pub fn encode_xdr(&self, w: &mut XdrWriter) -> Result<(), XdrError> {
-        w.write_opaque(&self.0)?;
-        Ok(())
-    }
-
     pub fn encode(&self, w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
-        self.encode_xdr(w)?;
+        w.write_opaque(&self.0)?;
         Ok(())
     }
 
@@ -43,7 +33,7 @@ mod tests {
 
     #[test]
     fn test_secoid4_encode_decode() {
-        let original = SecOid4(vec![0x01, 0x02, 0x03, 0x04]);
+        let original = SecOid4::new(vec![0x01, 0x02, 0x03, 0x04]);
 
         let mut w = XdrWriter::new();
         original.encode(&mut w).unwrap();
@@ -56,7 +46,7 @@ mod tests {
 
     #[test]
     fn test_secoid4_empty() {
-        let original = SecOid4(vec![]);
+        let original = SecOid4::new(vec![]);
 
         let mut w = XdrWriter::new();
         original.encode(&mut w).unwrap();
@@ -70,47 +60,17 @@ mod tests {
     #[test]
     fn test_secoid4_as_bytes() {
         let data = vec![0xaa, 0xbb, 0xcc];
-        let oid = SecOid4(data.clone());
+        let oid = SecOid4::new(data.clone());
 
         assert_eq!(oid.as_bytes(), &data[..]);
     }
 
     #[test]
-    fn test_secoid4_decode_xdr() {
-        let original = SecOid4(vec![0x01, 0x02, 0x03, 0x04]);
+    fn test_secoid4_decode_truncated() {
+        let buf = [0x00, 0x00, 0x00, 0x04, 0x11, 0x22]; // length=4 but truncated
+        let mut r = XdrReader::new(&buf);
 
-        let mut w = XdrWriter::new();
-        original.encode_xdr(&mut w).unwrap();
-
-        let mut r = XdrReader::new(w.as_bytes());
-        let decoded = SecOid4::decode_xdr(&mut r).unwrap();
-
-        assert_eq!(original, decoded);
-    }
-
-    #[test]
-    fn test_secoid4_encode_xdr() {
-        let original = SecOid4(vec![0xaa, 0xbb, 0xcc]);
-
-        let mut w = XdrWriter::new();
-        original.encode_xdr(&mut w).unwrap();
-
-        let mut r = XdrReader::new(w.as_bytes());
-        let decoded = SecOid4::decode_xdr(&mut r).unwrap();
-
-        assert_eq!(original, decoded);
-    }
-
-    #[test]
-    fn test_secoid4_encode_decode_xdr_empty() {
-        let original = SecOid4(vec![]);
-
-        let mut w = XdrWriter::new();
-        original.encode_xdr(&mut w).unwrap();
-
-        let mut r = XdrReader::new(w.as_bytes());
-        let decoded = SecOid4::decode_xdr(&mut r).unwrap();
-
-        assert_eq!(original, decoded);
+        let err = SecOid4::decode(&mut r).unwrap_err();
+        assert!(matches!(err, Nfsv4Error::Xdr(_)));
     }
 }
