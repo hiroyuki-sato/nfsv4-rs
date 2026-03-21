@@ -37,7 +37,7 @@ dependencies = [
 [[package]]
 name = "onc-rpc-rs"
 version = "0.1.0"
-source = "git+https://github.com/hiroyuki-sato/onc-rpc-rs.git?branch=main#067a608fb2b29bbcdd92747d6b3bbacd69e6c14f"
+source = "git+https://github.com/hiroyuki-sato/onc-rpc-rs.git?branch=main#562fdfb34e6a36218d8cccb91f7538c7c05d22b9"
 dependencies = [
  "xdr-rs",
 ]
