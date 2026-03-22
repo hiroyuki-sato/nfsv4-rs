@@ -148,6 +148,73 @@ impl TryFrom<i32> for NfsOpnum4 {
     }
 }
 
+impl From<NfsOpnum4> for i32 {
+    fn from(op: NfsOpnum4) -> Self {
+        match op {
+            NfsOpnum4::Access => 3,
+            NfsOpnum4::Close => 4,
+            NfsOpnum4::Commit => 5,
+            NfsOpnum4::Create => 6,
+            NfsOpnum4::DelegPurge => 7,
+            NfsOpnum4::DelegReturn => 8,
+            NfsOpnum4::GetAttr => 9,
+            NfsOpnum4::GetFh => 10,
+            NfsOpnum4::Link => 11,
+            NfsOpnum4::Lock => 12,
+            NfsOpnum4::LockT => 13,
+            NfsOpnum4::LockU => 14,
+            NfsOpnum4::Lookup => 15,
+            NfsOpnum4::LookupP => 16,
+            NfsOpnum4::NVerify => 17,
+            NfsOpnum4::Open => 18,
+            NfsOpnum4::OpenAttr => 19,
+            NfsOpnum4::OpenConfirm => 20,
+            NfsOpnum4::OpenDowngrade => 21,
+            NfsOpnum4::PutFh => 22,
+            NfsOpnum4::PutPubFh => 23,
+            NfsOpnum4::PutRootFh => 24,
+            NfsOpnum4::Read => 25,
+            NfsOpnum4::ReadDir => 26,
+            NfsOpnum4::ReadLink => 27,
+            NfsOpnum4::Remove => 28,
+            NfsOpnum4::Rename => 29,
+            NfsOpnum4::Renew => 30,
+            NfsOpnum4::RestoreFh => 31,
+            NfsOpnum4::SaveFh => 32,
+            NfsOpnum4::SecInfo => 33,
+            NfsOpnum4::SetAttr => 34,
+            NfsOpnum4::SetClientId => 35,
+            NfsOpnum4::SetClientIdConfirm => 36,
+            NfsOpnum4::Verify => 37,
+            NfsOpnum4::Write => 38,
+            NfsOpnum4::ReleaseLockOwner => 39,
+
+            // NFSv4.1
+            NfsOpnum4::BackchannelCtl => 40,
+            NfsOpnum4::BindConnToSession => 41,
+            NfsOpnum4::ExchangeId => 42,
+            NfsOpnum4::CreateSession => 43,
+            NfsOpnum4::DestroySession => 44,
+            NfsOpnum4::FreeStateId => 45,
+            NfsOpnum4::GetDirDelegation => 46,
+            NfsOpnum4::GetDeviceInfo => 47,
+            NfsOpnum4::GetDeviceList => 48,
+            NfsOpnum4::LayoutCommit => 49,
+            NfsOpnum4::LayoutGet => 50,
+            NfsOpnum4::LayoutReturn => 51,
+            NfsOpnum4::SecInfoNoName => 52,
+            NfsOpnum4::Sequence => 53,
+            NfsOpnum4::SetSsv => 54,
+            NfsOpnum4::TestStateId => 55,
+            NfsOpnum4::WantDelegation => 56,
+            NfsOpnum4::DestroyClientId => 57,
+            NfsOpnum4::ReclaimComplete => 58,
+
+            NfsOpnum4::Illegal => 10044,
+        }
+    }
+}
+
 /// RFC7531: nfs_argop4
 ///
 /// Operation arguments used in a COMPOUND request.
@@ -553,9 +620,73 @@ impl NfsArgOp4 {
             NfsArgOp4::Illegal => {
                 w.write_i32(NfsOpnum4::Illegal as i32)?;
             }
-            _ => return Err(Nfsv4Error::InvalidEnumValue(NfsOpnum4::Illegal as i32)),
+            _ => return Err(Nfsv4Error::NotImplementedOp(self.opnum())),
         }
         Ok(())
+    }
+    pub fn opnum(&self) -> NfsOpnum4 {
+        match self {
+            NfsArgOp4::Access(_) => NfsOpnum4::Access,
+            NfsArgOp4::Close(_) => NfsOpnum4::Close,
+            NfsArgOp4::Commit(_) => NfsOpnum4::Commit,
+            NfsArgOp4::Create(_) => NfsOpnum4::Create,
+            NfsArgOp4::DelegPurge(_) => NfsOpnum4::DelegPurge,
+            NfsArgOp4::DelegReturn(_) => NfsOpnum4::DelegReturn,
+            NfsArgOp4::GetAttr(_) => NfsOpnum4::GetAttr,
+            NfsArgOp4::GetFh => NfsOpnum4::GetFh,
+            NfsArgOp4::Link(_) => NfsOpnum4::Link,
+            NfsArgOp4::Lock(_) => NfsOpnum4::Lock,
+            NfsArgOp4::LockT(_) => NfsOpnum4::LockT,
+            NfsArgOp4::LockU(_) => NfsOpnum4::LockU,
+            NfsArgOp4::Lookup(_) => NfsOpnum4::Lookup,
+            NfsArgOp4::LookupP => NfsOpnum4::LookupP,
+            NfsArgOp4::NVerify(_) => NfsOpnum4::NVerify,
+            NfsArgOp4::Open(_) => NfsOpnum4::Open,
+            NfsArgOp4::OpenAttr(_) => NfsOpnum4::OpenAttr,
+            NfsArgOp4::OpenConfirm(_) => NfsOpnum4::OpenConfirm,
+            NfsArgOp4::OpenDowngrade(_) => NfsOpnum4::OpenDowngrade,
+            NfsArgOp4::PutFh(_) => NfsOpnum4::PutFh,
+            NfsArgOp4::PutPubFh => NfsOpnum4::PutPubFh,
+            NfsArgOp4::PutRootFh => NfsOpnum4::PutRootFh,
+            NfsArgOp4::Read(_) => NfsOpnum4::Read,
+            NfsArgOp4::ReadDir(_) => NfsOpnum4::ReadDir,
+            NfsArgOp4::ReadLink => NfsOpnum4::ReadLink,
+            NfsArgOp4::Remove(_) => NfsOpnum4::Remove,
+            NfsArgOp4::Rename(_) => NfsOpnum4::Rename,
+            NfsArgOp4::Renew(_) => NfsOpnum4::Renew,
+            NfsArgOp4::RestoreFh => NfsOpnum4::RestoreFh,
+            NfsArgOp4::SaveFh => NfsOpnum4::SaveFh,
+            NfsArgOp4::SecInfo(_) => NfsOpnum4::SecInfo,
+            NfsArgOp4::SetAttr(_) => NfsOpnum4::SetAttr,
+            NfsArgOp4::SetClientId(_) => NfsOpnum4::SetClientId,
+            NfsArgOp4::SetClientIdConfirm(_) => NfsOpnum4::SetClientIdConfirm,
+            NfsArgOp4::Verify(_) => NfsOpnum4::Verify,
+            NfsArgOp4::Write(_) => NfsOpnum4::Write,
+            NfsArgOp4::ReleaseLockOwner(_) => NfsOpnum4::ReleaseLockOwner,
+
+            // NFSv4.1
+            NfsArgOp4::BackchannelCtl(_) => NfsOpnum4::BackchannelCtl,
+            NfsArgOp4::BindConnToSession(_) => NfsOpnum4::BindConnToSession,
+            NfsArgOp4::ExchangeId(_) => NfsOpnum4::ExchangeId,
+            NfsArgOp4::CreateSession(_) => NfsOpnum4::CreateSession,
+            NfsArgOp4::DestroySession(_) => NfsOpnum4::DestroySession,
+            NfsArgOp4::FreeStateId(_) => NfsOpnum4::FreeStateId,
+            NfsArgOp4::GetDirDelegation(_) => NfsOpnum4::GetDirDelegation,
+            NfsArgOp4::GetDeviceInfo(_) => NfsOpnum4::GetDeviceInfo,
+            NfsArgOp4::GetDeviceList(_) => NfsOpnum4::GetDeviceList,
+            NfsArgOp4::LayoutCommit(_) => NfsOpnum4::LayoutCommit,
+            NfsArgOp4::LayoutGet(_) => NfsOpnum4::LayoutGet,
+            NfsArgOp4::LayoutReturn(_) => NfsOpnum4::LayoutReturn,
+            NfsArgOp4::SecInfoNoName(_) => NfsOpnum4::SecInfoNoName,
+            NfsArgOp4::Sequence(_) => NfsOpnum4::Sequence,
+            NfsArgOp4::SetSsv(_) => NfsOpnum4::SetSsv,
+            NfsArgOp4::TestStateId(_) => NfsOpnum4::TestStateId,
+            NfsArgOp4::WantDelegation(_) => NfsOpnum4::WantDelegation,
+            NfsArgOp4::DestroyClientId(_) => NfsOpnum4::DestroyClientId,
+            NfsArgOp4::ReclaimComplete(_) => NfsOpnum4::ReclaimComplete,
+
+            NfsArgOp4::Illegal => NfsOpnum4::Illegal,
+        }
     }
 }
 
@@ -924,9 +1055,73 @@ impl NfsResOp4 {
                 w.write_i32(NfsOpnum4::Illegal as i32)?;
                 res.encode(w)?;
             }
-            _ => return Err(Nfsv4Error::InvalidEnumValue(NfsOpnum4::Illegal as i32)),
+            _ => return Err(Nfsv4Error::NotImplementedOp(self.opnum())),
         }
         Ok(())
+    }
+    pub fn opnum(&self) -> NfsOpnum4 {
+        match self {
+            NfsResOp4::Access(_) => NfsOpnum4::Access,
+            NfsResOp4::Close(_) => NfsOpnum4::Close,
+            NfsResOp4::Commit(_) => NfsOpnum4::Commit,
+            NfsResOp4::Create(_) => NfsOpnum4::Create,
+            NfsResOp4::DelegPurge(_) => NfsOpnum4::DelegPurge,
+            NfsResOp4::DelegReturn(_) => NfsOpnum4::DelegReturn,
+            NfsResOp4::GetAttr(_) => NfsOpnum4::GetAttr,
+            NfsResOp4::GetFh(_) => NfsOpnum4::GetFh,
+            NfsResOp4::Link(_) => NfsOpnum4::Link,
+            NfsResOp4::Lock(_) => NfsOpnum4::Lock,
+            NfsResOp4::LockT(_) => NfsOpnum4::LockT,
+            NfsResOp4::LockU(_) => NfsOpnum4::LockU,
+            NfsResOp4::Lookup(_) => NfsOpnum4::Lookup,
+            NfsResOp4::LookupP(_) => NfsOpnum4::LookupP,
+            NfsResOp4::NVerify(_) => NfsOpnum4::NVerify,
+            NfsResOp4::Open(_) => NfsOpnum4::Open,
+            NfsResOp4::OpenAttr(_) => NfsOpnum4::OpenAttr,
+            NfsResOp4::OpenConfirm(_) => NfsOpnum4::OpenConfirm,
+            NfsResOp4::OpenDowngrade(_) => NfsOpnum4::OpenDowngrade,
+            NfsResOp4::PutFh(_) => NfsOpnum4::PutFh,
+            NfsResOp4::PutPubFh(_) => NfsOpnum4::PutPubFh,
+            NfsResOp4::PutRootFh(_) => NfsOpnum4::PutRootFh,
+            NfsResOp4::Read(_) => NfsOpnum4::Read,
+            NfsResOp4::ReadDir(_) => NfsOpnum4::ReadDir,
+            NfsResOp4::ReadLink(_) => NfsOpnum4::ReadLink,
+            NfsResOp4::Remove(_) => NfsOpnum4::Remove,
+            NfsResOp4::Rename(_) => NfsOpnum4::Rename,
+            NfsResOp4::Renew(_) => NfsOpnum4::Renew,
+            NfsResOp4::RestoreFh(_) => NfsOpnum4::RestoreFh,
+            NfsResOp4::SaveFh(_) => NfsOpnum4::SaveFh,
+            NfsResOp4::SecInfo(_) => NfsOpnum4::SecInfo,
+            NfsResOp4::SetAttr(_) => NfsOpnum4::SetAttr,
+            NfsResOp4::SetClientId(_) => NfsOpnum4::SetClientId,
+            NfsResOp4::SetClientIdConfirm(_) => NfsOpnum4::SetClientIdConfirm,
+            NfsResOp4::Verify(_) => NfsOpnum4::Verify,
+            NfsResOp4::Write(_) => NfsOpnum4::Write,
+            NfsResOp4::ReleaseLockOwner(_) => NfsOpnum4::ReleaseLockOwner,
+
+            // NFSv4.1
+            NfsResOp4::BackchannelCtl(_) => NfsOpnum4::BackchannelCtl,
+            NfsResOp4::BindConnToSession(_) => NfsOpnum4::BindConnToSession,
+            NfsResOp4::ExchangeId(_) => NfsOpnum4::ExchangeId,
+            NfsResOp4::CreateSession(_) => NfsOpnum4::CreateSession,
+            NfsResOp4::DestroySession(_) => NfsOpnum4::DestroySession,
+            NfsResOp4::FreeStateId(_) => NfsOpnum4::FreeStateId,
+            NfsResOp4::GetDirDelegation(_) => NfsOpnum4::GetDirDelegation,
+            NfsResOp4::GetDeviceInfo(_) => NfsOpnum4::GetDeviceInfo,
+            NfsResOp4::GetDeviceList(_) => NfsOpnum4::GetDeviceList,
+            NfsResOp4::LayoutCommit(_) => NfsOpnum4::LayoutCommit,
+            NfsResOp4::LayoutGet(_) => NfsOpnum4::LayoutGet,
+            NfsResOp4::LayoutReturn(_) => NfsOpnum4::LayoutReturn,
+            NfsResOp4::SecInfoNoName(_) => NfsOpnum4::SecInfoNoName,
+            NfsResOp4::Sequence(_) => NfsOpnum4::Sequence,
+            NfsResOp4::SetSsv(_) => NfsOpnum4::SetSsv,
+            NfsResOp4::TestStateId(_) => NfsOpnum4::TestStateId,
+            NfsResOp4::WantDelegation(_) => NfsOpnum4::WantDelegation,
+            NfsResOp4::DestroyClientId(_) => NfsOpnum4::DestroyClientId,
+            NfsResOp4::ReclaimComplete(_) => NfsOpnum4::ReclaimComplete,
+
+            NfsResOp4::Illegal(_) => NfsOpnum4::Illegal,
+        }
     }
 }
 
