@@ -208,9 +208,9 @@ pub enum NfsArgOp4 {
     ReleaseLockOwner(ReleaseLockOwner4Args),
 
     // NFSv4.1
-    // BackchannelCtl(BackchannelCtl4Args), // TODO
-    // BindConnToSession(BindConnToSession4Args),
-    // ExchangeId(ExchangeId4Args), // TODO
+    BackchannelCtl(BackchannelCtl4Args),
+    BindConnToSession(BindConnToSession4Args),
+    ExchangeId(ExchangeId4Args),
     CreateSession(CreateSession4Args),
     DestroySession(DestroySession4Args),
     FreeStateId(FreeStateId4Args),

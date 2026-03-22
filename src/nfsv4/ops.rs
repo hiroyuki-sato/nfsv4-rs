@@ -3,6 +3,7 @@
 
 pub mod access;
 pub mod backchannel_ctl;
+pub mod bind_conn_to_session;
 pub mod close;
 pub mod commit;
 pub mod create;
@@ -57,6 +58,7 @@ pub mod write;
 
 pub use access::*;
 pub use backchannel_ctl::*;
+pub use bind_conn_to_session::*;
 pub use close::*;
 pub use commit::*;
 pub use create::*;
