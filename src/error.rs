@@ -3,6 +3,8 @@ use xdr_rs::error::XdrError;
 use onc_rpc_rs::auth::AuthFlavor;
 use onc_rpc_rs::error::RpcError;
 
+use crate::nfsv4::compound::NfsOpnum4;
+
 #[derive(Debug)]
 pub enum Nfsv4Error {
     Xdr(XdrError),
@@ -29,6 +31,7 @@ pub enum Nfsv4Error {
     InvalidStateProtectHow(i32),
     InvalidRpcGssSvcT(i32),
     UnsupportedAuthFlavor(AuthFlavor),
+    NotImplementedOp(NfsOpnum4),
 }
 
 impl From<XdrError> for Nfsv4Error {
