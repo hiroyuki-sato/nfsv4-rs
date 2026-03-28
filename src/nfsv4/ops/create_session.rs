@@ -96,6 +96,8 @@ pub const CREATE_SESSION4_FLAG_PERSIST: u32 = 0x00000001;
 pub const CREATE_SESSION4_FLAG_CONN_BACK_CHAN: u32 = 0x00000002;
 pub const CREATE_SESSION4_FLAG_CONN_RDMA: u32 = 0x00000004;
 
+const DEFAULT_CSA_CB_PRGRAM: u32 = 0x40000000;
+
 /// RFC8881 Section 18.36.1: CREATE_SESSION4args
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CreateSession4Args {
@@ -408,5 +410,27 @@ mod tests {
                 || fore.ca_maxoperations != back.ca_maxoperations
                 || fore.ca_maxrequests != back.ca_maxrequests
         );
+    }
+
+    //
+    #[test]
+    fn test_create_session4_args() {
+        let args = CreateSession4Args {
+            csa_clientid: 0x1234_5678_9abc_def0,
+            csa_sequence: 123,
+            csa_flags: CREATE_SESSION4_FLAG_CONN_BACK_CHAN,
+            csa_fore_chan_attrs: ChannelAttrs4::default_force(),
+            csa_back_chan_attrs: ChannelAttrs4::default_back(),
+            csa_cb_program: DEFAULT_CSA_CB_PRGRAM,
+            csa_sec_parms: vec![CallbackSecParms4::auth_sys_user_1000("test-client")],
+        };
+
+        let mut w = XdrWriter::new();
+        args.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = CreateSession4Args::decode(&mut r).unwrap();
+
+        assert_eq!(args, decoded);
     }
 }
