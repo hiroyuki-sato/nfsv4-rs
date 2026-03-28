@@ -14,6 +14,20 @@ use crate::nfsv4::types::SessionId4;
 use crate::nfsv4::types::Stat4;
 use crate::xdr_ext::{read_array_nfs, write_array_nfs};
 
+const DEFAULT_CSA_HEADER_PAD_SIZE: u32 = 0;
+const DEFAULT_CSA_MAX_REQUEST_SIZE: u32 = 1049620u32; // 1 MiB + NFS+RPC header
+const DEFAULT_CSA_MAX_RESPONSE_SIZE: u32 = 1049480u32; // 1 MiB + NFS+RPC header - 512 (worst-case header size)
+const DEFAULT_CSA_MAX_RESPONSE_SIZE_CACHED: u32 = 3428u32; // 4096 (typical page size) - 512 (worst-case header size) 
+const DEFAULT_CSA_MAX_OPERATIONS: u32 = 8;
+const DEFAULT_CSA_MAX_REQUESTS: u32 = 64;
+
+const DEFAULT_CB_HEADER_PAD_SIZE: u32 = 0;
+const DEFAULT_CB_MAX_REQUEST_SIZE: u32 = 4096u32;
+const DEFAULT_CB_MAX_RESPONSE_SIZE: u32 = 4096u32;
+const DEFAULT_CB_MAX_RESPONSE_SIZE_CACHED: u32 = 0u32; // 4096 (typical page size) - 512 (worst-case header size) 
+const DEFAULT_CB_MAX_OPERATIONS: u32 = 2;
+const DEFAULT_CB_MAX_REQUESTS: u32 = 1;
+
 /// RFC8881 Section 18.36.1: channel_attrs4
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChannelAttrs4 {
@@ -27,6 +41,29 @@ pub struct ChannelAttrs4 {
 }
 
 impl ChannelAttrs4 {
+    pub fn default_force() -> Self {
+        Self {
+            ca_headerpadsize: DEFAULT_CSA_HEADER_PAD_SIZE,
+            ca_maxrequestsize: DEFAULT_CSA_MAX_REQUEST_SIZE,
+            ca_maxresponsesize: DEFAULT_CSA_MAX_RESPONSE_SIZE,
+            ca_maxresponsesize_cached: DEFAULT_CSA_MAX_RESPONSE_SIZE_CACHED,
+            ca_maxoperations: DEFAULT_CSA_MAX_OPERATIONS,
+            ca_maxrequests: DEFAULT_CSA_MAX_REQUESTS,
+            ca_rdma_ird: vec![],
+        }
+    }
+    pub fn default_back() -> Self {
+        Self {
+            ca_headerpadsize: DEFAULT_CB_HEADER_PAD_SIZE,
+            ca_maxrequestsize: DEFAULT_CB_MAX_REQUEST_SIZE,
+            ca_maxresponsesize: DEFAULT_CB_MAX_RESPONSE_SIZE,
+            ca_maxresponsesize_cached: DEFAULT_CB_MAX_RESPONSE_SIZE_CACHED,
+            ca_maxoperations: DEFAULT_CB_MAX_OPERATIONS,
+            ca_maxrequests: DEFAULT_CB_MAX_REQUESTS,
+            ca_rdma_ird: vec![],
+        }
+    }
+
     pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
         Ok(Self {
             ca_headerpadsize: r.read_u32()?,
@@ -324,5 +361,52 @@ mod tests {
         let decoded = CreateSession4Res::decode(&mut r).unwrap();
 
         assert_eq!(original, decoded);
+    }
+
+    #[test]
+    fn test_channelattrs4_default_force_values() {
+        let attrs = ChannelAttrs4::default_force();
+
+        assert_eq!(attrs.ca_headerpadsize, DEFAULT_CSA_HEADER_PAD_SIZE);
+        assert_eq!(attrs.ca_maxrequestsize, DEFAULT_CSA_MAX_REQUEST_SIZE);
+        assert_eq!(attrs.ca_maxresponsesize, DEFAULT_CSA_MAX_RESPONSE_SIZE);
+        assert_eq!(
+            attrs.ca_maxresponsesize_cached,
+            DEFAULT_CSA_MAX_RESPONSE_SIZE_CACHED
+        );
+        assert_eq!(attrs.ca_maxoperations, DEFAULT_CSA_MAX_OPERATIONS);
+        assert_eq!(attrs.ca_maxrequests, DEFAULT_CSA_MAX_REQUESTS);
+        assert!(attrs.ca_rdma_ird.is_empty());
+    }
+
+    #[test]
+    fn test_channelattrs4_default_back_values() {
+        let attrs = ChannelAttrs4::default_back();
+
+        assert_eq!(attrs.ca_headerpadsize, DEFAULT_CB_HEADER_PAD_SIZE);
+        assert_eq!(attrs.ca_maxrequestsize, DEFAULT_CB_MAX_REQUEST_SIZE);
+        assert_eq!(attrs.ca_maxresponsesize, DEFAULT_CB_MAX_RESPONSE_SIZE);
+        assert_eq!(
+            attrs.ca_maxresponsesize_cached,
+            DEFAULT_CB_MAX_RESPONSE_SIZE_CACHED
+        );
+        assert_eq!(attrs.ca_maxoperations, DEFAULT_CB_MAX_OPERATIONS);
+        assert_eq!(attrs.ca_maxrequests, DEFAULT_CB_MAX_REQUESTS);
+        assert!(attrs.ca_rdma_ird.is_empty());
+    }
+
+    #[test]
+    fn test_channelattrs4_force_and_back_are_different() {
+        let fore = ChannelAttrs4::default_force();
+        let back = ChannelAttrs4::default_back();
+
+        assert!(
+            fore.ca_headerpadsize != back.ca_headerpadsize
+                || fore.ca_maxrequestsize != back.ca_maxrequestsize
+                || fore.ca_maxresponsesize != back.ca_maxresponsesize
+                || fore.ca_maxresponsesize_cached != back.ca_maxresponsesize_cached
+                || fore.ca_maxoperations != back.ca_maxoperations
+                || fore.ca_maxrequests != back.ca_maxrequests
+        );
     }
 }
