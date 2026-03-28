@@ -70,6 +70,30 @@ pub enum CallbackSecParms4 {
 }
 
 impl CallbackSecParms4 {
+    pub fn auth_sys_root(machine: &str) -> Self {
+        Self::AuthSys(AuthSysParams {
+            stamp: Self::generate_stamp(),
+            machinename: machine.to_string(),
+            uid: 0,
+            gid: 0,
+            gids: vec![0],
+        })
+    }
+
+    pub fn auth_sys_user(machine: &str, uid: u32, gid: u32) -> Self {
+        Self::AuthSys(AuthSysParams {
+            stamp: Self::generate_stamp(),
+            machinename: machine.to_string(),
+            uid,
+            gid,
+            gids: vec![gid],
+        })
+    }
+
+    pub fn auth_sys_user_1000(machine: &str) -> Self {
+        Self::auth_sys_user(machine, 1000, 1000)
+    }
+
     pub fn decode(r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
         let flavor = AuthFlavor::try_from(r.read_i32()?)?;
         match flavor {
@@ -93,6 +117,15 @@ impl CallbackSecParms4 {
             }
         }
         Ok(())
+    }
+
+    fn generate_stamp() -> u32 {
+        use std::time::{SystemTime, UNIX_EPOCH};
+
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_secs() as u32
     }
 }
 
@@ -311,5 +344,58 @@ mod tests {
         let decoded = BackchannelCtl4Res::decode(&mut r).unwrap();
 
         assert_eq!(original, decoded);
+    }
+
+    // Additional tests for CallbackSecParms4
+    #[test]
+    fn test_auth_sys_root() {
+        let machine = "test-host";
+        let v = CallbackSecParms4::auth_sys_root(machine);
+
+        match v {
+            CallbackSecParms4::AuthSys(params) => {
+                assert_eq!(params.machinename, machine);
+                assert_eq!(params.uid, 0);
+                assert_eq!(params.gid, 0);
+                assert_eq!(params.gids, vec![0]);
+
+                assert!(params.stamp != 0);
+            }
+            _ => panic!("expected AuthSys"),
+        }
+    }
+
+    #[test]
+    fn test_auth_sys_user() {
+        let machine = "client1";
+        let v = CallbackSecParms4::auth_sys_user(machine, 1234, 5678);
+
+        match v {
+            CallbackSecParms4::AuthSys(params) => {
+                assert_eq!(params.machinename, machine);
+                assert_eq!(params.uid, 1234);
+                assert_eq!(params.gid, 5678);
+                assert_eq!(params.gids, vec![5678]);
+                assert!(params.stamp != 0);
+            }
+            _ => panic!("expected AuthSys"),
+        }
+    }
+
+    #[test]
+    fn test_auth_sys_user_1000() {
+        let machine = "client1000";
+        let v = CallbackSecParms4::auth_sys_user_1000(machine);
+
+        match v {
+            CallbackSecParms4::AuthSys(params) => {
+                assert_eq!(params.machinename, machine);
+                assert_eq!(params.uid, 1000);
+                assert_eq!(params.gid, 1000);
+                assert_eq!(params.gids, vec![1000]);
+                assert!(params.stamp != 0);
+            }
+            _ => panic!("expected AuthSys"),
+        }
     }
 }
