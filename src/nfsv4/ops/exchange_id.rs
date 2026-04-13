@@ -5,6 +5,7 @@ use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
+use crate::logger::LogSummary;
 use crate::nfsv4::ops::GssHandle4;
 use crate::nfsv4::types::Bitmap4;
 use crate::nfsv4::types::ClientId4;
@@ -171,6 +172,18 @@ impl ExchangeId4Args {
     }
 }
 
+impl LogSummary for ExchangeId4Args {
+    fn log_summary(&self) -> String {
+        format!(
+            "clientowner={:?}, flags=0x{:08x}, state_protect={:?}, client_impl_id_count={}",
+            self.eia_clientowner,
+            self.eia_flags,
+            self.eia_state_protect,
+            self.eia_client_impl_id.len(),
+        )
+    }
+}
+
 /// RFC8881 Section 18.35.2: ssv_prot_info4
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SsvProtInfo4 {
@@ -281,6 +294,24 @@ impl ExchangeId4ResOk {
 pub enum ExchangeId4Res {
     Ok(ExchangeId4ResOk),
     Err(Stat4),
+}
+
+impl LogSummary for ExchangeId4Res {
+    fn log_summary(&self) -> String {
+        match self {
+            Self::Ok(resok) => format!(
+                "status=OK, clientid={}, sequenceid={}, flags=0x{:08x}, state_protect={:?}, server_owner={:?}, server_scope_len={}, server_impl_id_count={}",
+                resok.eir_clientid,
+                resok.eir_sequenceid,
+                resok.eir_flags,
+                resok.eir_state_protect,
+                resok.eir_server_owner,
+                resok.eir_server_scope.len(),
+                resok.eir_server_impl_id.len(),
+            ),
+            Self::Err(stat) => format!("status={:?}", stat),
+        }
+    }
 }
 
 impl ExchangeId4Res {

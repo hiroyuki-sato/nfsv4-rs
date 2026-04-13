@@ -5,6 +5,7 @@ use xdr_rs::reader::XdrReader;
 use xdr_rs::writer::XdrWriter;
 
 use crate::error::Nfsv4Error;
+use crate::logger::LogSummary;
 use crate::nfsv4::ops::CallbackSecParms4;
 use crate::nfsv4::types::ClientId4;
 use crate::nfsv4::types::Count4;
@@ -135,6 +136,21 @@ impl CreateSession4Args {
     }
 }
 
+impl LogSummary for CreateSession4Args {
+    fn log_summary(&self) -> String {
+        format!(
+            "clientid={}, sequence={}, flags=0x{:08x}, fore_chan_attrs={:?}, back_chan_attrs={:?}, cb_program=0x{:08x}, sec_parms_count={}",
+            self.csa_clientid,
+            self.csa_sequence,
+            self.csa_flags,
+            self.csa_fore_chan_attrs,
+            self.csa_back_chan_attrs,
+            self.csa_cb_program,
+            self.csa_sec_parms.len(),
+        )
+    }
+}
+
 /// RFC8881 Section 18.36.2: CREATE_SESSION4resok
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CreateSession4ResOk {
@@ -176,6 +192,22 @@ impl CreateSession4ResOk {
 pub enum CreateSession4Res {
     Ok(CreateSession4ResOk),
     Err(Stat4),
+}
+
+impl LogSummary for CreateSession4Res {
+    fn log_summary(&self) -> String {
+        match self {
+            Self::Ok(ok) => format!(
+                "OK: sessionid={:?}, sequence={}, flags=0x{:08x}, fore_chan_attrs={:?}, back_chan_attrs={:?}",
+                ok.csr_sessionid,
+                ok.csr_sequence,
+                ok.csr_flags,
+                ok.csr_fore_chan_attrs,
+                ok.csr_back_chan_attrs,
+            ),
+            Self::Err(err) => format!("ERR: status={:?}", err),
+        }
+    }
 }
 
 impl CreateSession4Res {
