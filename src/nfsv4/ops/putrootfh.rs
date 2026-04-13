@@ -39,6 +39,18 @@ use crate::nfsv4::types::*;
 //    PUTROOTFH is commonly used as the first operator in an NFS request to
 //    set the context for operations that follow it.
 
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct PutRootFh4Args;
+
+impl PutRootFh4Args {
+    pub fn decode(_r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        Ok(Self {})
+    }
+    pub fn encode(&self, _w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        Ok(())
+    }
+}
+
 /// RFC7531: PUTROOTFH4res
 ///
 /// Result of the PUTROOTFH operation.
@@ -64,6 +76,43 @@ impl PutRootFh4Res {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_putrootfh4res_encode_decode_roundtrip_ok() {
+        let original = PutRootFh4Res { status: Stat4::Ok };
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = PutRootFh4Res::decode(&mut r).unwrap();
+
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_putrootfh4res_decode_ok() {
+        let mut w = XdrWriter::new();
+        w.write_i32(Stat4::Ok as i32).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = PutRootFh4Res::decode(&mut r).unwrap();
+
+        assert_eq!(decoded.status, Stat4::Ok);
+    }
+
+    #[test]
+    fn test_putrootfh4res_encode_ok() {
+        let res = PutRootFh4Res { status: Stat4::Ok };
+
+        let mut w = XdrWriter::new();
+        res.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let raw = r.read_i32().unwrap();
+
+        assert_eq!(raw, Stat4::Ok as i32);
+    }
 
     #[test]
     fn test_putrootfh4res_encode_decode() {
