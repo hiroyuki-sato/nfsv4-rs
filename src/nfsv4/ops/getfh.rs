@@ -7,6 +7,18 @@ use xdr_rs::writer::XdrWriter;
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
 
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct GetFh4Args;
+
+impl GetFh4Args {
+    pub fn decode(_r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        Ok(Self {})
+    }
+    pub fn encode(&self, _w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        Ok(())
+    }
+}
+
 /// RFC7531: GETFH4resok
 ///
 /// Successful result of the GETFH operation.
@@ -69,6 +81,20 @@ impl GetFh4Res {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_getfh4args_encode_decode() {
+        let original = GetFh4Args;
+
+        let mut w = XdrWriter::new();
+        original.encode(&mut w).unwrap();
+
+        let mut r = XdrReader::new(w.as_bytes());
+        let decoded = GetFh4Args::decode(&mut r).unwrap();
+
+        assert_eq!(original, decoded);
+        assert!(w.as_bytes().is_empty());
+    }
 
     #[test]
     fn test_getfh4resok_encode_decode() {
