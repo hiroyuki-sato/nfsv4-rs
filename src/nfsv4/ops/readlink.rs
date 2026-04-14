@@ -7,6 +7,18 @@ use xdr_rs::writer::XdrWriter;
 use crate::error::Nfsv4Error;
 use crate::nfsv4::types::*;
 
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct ReadLink4Args;
+
+impl ReadLink4Args {
+    pub fn decode(_r: &mut XdrReader) -> Result<Self, Nfsv4Error> {
+        Ok(Self {})
+    }
+    pub fn encode(&self, _w: &mut XdrWriter) -> Result<(), Nfsv4Error> {
+        Ok(())
+    }
+}
+
 /// RFC7531: READLINK4resok
 ///
 /// Successful result of the READLINK operation.

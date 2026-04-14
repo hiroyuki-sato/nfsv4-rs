@@ -229,7 +229,7 @@ pub enum NfsArgOp4 {
     GetAttr(GetAttr4Args),
 
     /// GETFH has no arguments.
-    GetFh,
+    GetFh(GetFh4Args),
 
     Link(Link4Args),
     Lock(Lock4Args),
@@ -238,7 +238,7 @@ pub enum NfsArgOp4 {
     Lookup(Lookup4Args),
 
     /// LOOKUPP has no arguments.
-    LookupP,
+    LookupP(LookupP4Args),
 
     NVerify(NVerify4Args),
     Open(Open4Args),
@@ -248,26 +248,26 @@ pub enum NfsArgOp4 {
     PutFh(PutFh4Args),
 
     /// PUTPUBFH has no arguments.
-    PutPubFh,
+    PutPubFh(PutPubFh4Args),
 
     /// PUTROOTFH has no arguments.
-    PutRootFh,
+    PutRootFh(PutRootFh4Args),
 
     Read(Read4Args),
     ReadDir(ReadDir4Args),
 
     /// READLINK has no arguments.
-    ReadLink,
+    ReadLink(ReadLink4Args),
 
     Remove(Remove4Args),
     Rename(Rename4Args),
     Renew(Renew4Args),
 
     /// RESTOREFH has no arguments.
-    RestoreFh,
+    RestoreFh(RestoreFh4Args),
 
     /// SAVEFH has no arguments.
-    SaveFh,
+    SaveFh(SaveFh4Args),
 
     SecInfo(SecInfo4Args),
     SetAttr(SetAttr4Args),
@@ -329,7 +329,7 @@ impl NfsArgOp4 {
             // }
             // NfsOpnum4::PutFh => Ok(NfsArgOp4::PutFh(PutFh4Args::decode(r)?)),
             // NfsOpnum4::PutPubFh => Ok(NfsArgOp4::PutPubFh),
-            NfsOpnum4::PutRootFh => Ok(NfsArgOp4::PutRootFh),
+            NfsOpnum4::PutRootFh => Ok(NfsArgOp4::PutRootFh(PutRootFh4Args::decode(r)?)),
             // NfsOpnum4::Read => Ok(NfsArgOp4::Read(Read4Args::decode(r)?)),
             NfsOpnum4::ReadDir => Ok(NfsArgOp4::ReadDir(ReadDir4Args::decode(r)?)),
             // NfsOpnum4::ReadLink => Ok(NfsArgOp4::ReadLink),
@@ -479,8 +479,9 @@ impl NfsArgOp4 {
             // NfsArgOp4::PutPubFh => {
             //     w.write_i32(NfsOpnum4::PutPubFh as i32)?;
             // }
-            NfsArgOp4::PutRootFh => {
+            NfsArgOp4::PutRootFh(arg) => {
                 w.write_i32(NfsOpnum4::PutRootFh as i32)?;
+                arg.encode(w)?;
             }
             // NfsArgOp4::Read(arg) => {
             //     w.write_i32(NfsOpnum4::Read as i32)?;
@@ -633,29 +634,29 @@ impl NfsArgOp4 {
             NfsArgOp4::DelegPurge(_) => NfsOpnum4::DelegPurge,
             NfsArgOp4::DelegReturn(_) => NfsOpnum4::DelegReturn,
             NfsArgOp4::GetAttr(_) => NfsOpnum4::GetAttr,
-            NfsArgOp4::GetFh => NfsOpnum4::GetFh,
+            NfsArgOp4::GetFh(_) => NfsOpnum4::GetFh,
             NfsArgOp4::Link(_) => NfsOpnum4::Link,
             NfsArgOp4::Lock(_) => NfsOpnum4::Lock,
             NfsArgOp4::LockT(_) => NfsOpnum4::LockT,
             NfsArgOp4::LockU(_) => NfsOpnum4::LockU,
             NfsArgOp4::Lookup(_) => NfsOpnum4::Lookup,
-            NfsArgOp4::LookupP => NfsOpnum4::LookupP,
+            NfsArgOp4::LookupP(_) => NfsOpnum4::LookupP,
             NfsArgOp4::NVerify(_) => NfsOpnum4::NVerify,
             NfsArgOp4::Open(_) => NfsOpnum4::Open,
             NfsArgOp4::OpenAttr(_) => NfsOpnum4::OpenAttr,
             NfsArgOp4::OpenConfirm(_) => NfsOpnum4::OpenConfirm,
             NfsArgOp4::OpenDowngrade(_) => NfsOpnum4::OpenDowngrade,
             NfsArgOp4::PutFh(_) => NfsOpnum4::PutFh,
-            NfsArgOp4::PutPubFh => NfsOpnum4::PutPubFh,
-            NfsArgOp4::PutRootFh => NfsOpnum4::PutRootFh,
+            NfsArgOp4::PutPubFh(_) => NfsOpnum4::PutPubFh,
+            NfsArgOp4::PutRootFh(_) => NfsOpnum4::PutRootFh,
             NfsArgOp4::Read(_) => NfsOpnum4::Read,
             NfsArgOp4::ReadDir(_) => NfsOpnum4::ReadDir,
-            NfsArgOp4::ReadLink => NfsOpnum4::ReadLink,
+            NfsArgOp4::ReadLink(_) => NfsOpnum4::ReadLink,
             NfsArgOp4::Remove(_) => NfsOpnum4::Remove,
             NfsArgOp4::Rename(_) => NfsOpnum4::Rename,
             NfsArgOp4::Renew(_) => NfsOpnum4::Renew,
-            NfsArgOp4::RestoreFh => NfsOpnum4::RestoreFh,
-            NfsArgOp4::SaveFh => NfsOpnum4::SaveFh,
+            NfsArgOp4::RestoreFh(_) => NfsOpnum4::RestoreFh,
+            NfsArgOp4::SaveFh(_) => NfsOpnum4::SaveFh,
             NfsArgOp4::SecInfo(_) => NfsOpnum4::SecInfo,
             NfsArgOp4::SetAttr(_) => NfsOpnum4::SetAttr,
             NfsArgOp4::SetClientId(_) => NfsOpnum4::SetClientId,
@@ -1238,13 +1239,15 @@ mod tests {
         let mut r = XdrReader::new(&w.as_bytes());
         let op = NfsArgOp4::decode(&mut r).unwrap();
 
-        assert_eq!(op, NfsArgOp4::PutRootFh);
+        assert_eq!(op, NfsArgOp4::PutRootFh(PutRootFh4Args {}));
     }
 
     #[test]
     fn nfs_argop4_encode_putrootfh() {
         let mut w = XdrWriter::new();
-        NfsArgOp4::PutRootFh.encode(&mut w).unwrap();
+        NfsArgOp4::PutRootFh(PutRootFh4Args {})
+            .encode(&mut w)
+            .unwrap();
 
         let mut r = XdrReader::new(&w.as_bytes());
         let raw = r.read_i32().unwrap();
@@ -1319,7 +1322,7 @@ mod tests {
         let original = Compound4Args {
             tag: "test-tag".to_string(),
             minorversion: 1,
-            argarray: vec![NfsArgOp4::PutRootFh],
+            argarray: vec![NfsArgOp4::PutRootFh(PutRootFh4Args {})],
         };
 
         let mut w = XdrWriter::new();
