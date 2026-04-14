@@ -1236,7 +1236,7 @@ mod tests {
         let mut w = XdrWriter::new();
         w.write_i32(NfsOpnum4::PutRootFh as i32).unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let op = NfsArgOp4::decode(&mut r).unwrap();
 
         assert_eq!(op, NfsArgOp4::PutRootFh(PutRootFh4Args {}));
@@ -1249,7 +1249,7 @@ mod tests {
             .encode(&mut w)
             .unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let raw = r.read_i32().unwrap();
 
         assert_eq!(raw, NfsOpnum4::PutRootFh as i32);
@@ -1260,7 +1260,7 @@ mod tests {
         let mut w = XdrWriter::new();
         w.write_i32(NfsOpnum4::GetAttr as i32).unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let err = NfsArgOp4::decode(&mut r).unwrap_err();
 
         match err {
@@ -1275,7 +1275,7 @@ mod tests {
         w.write_i32(NfsOpnum4::Illegal as i32).unwrap();
         w.write_i32(Stat4::OpIllegal as i32).unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let op = NfsResOp4::decode(&mut r).unwrap();
 
         assert_eq!(
@@ -1308,7 +1308,7 @@ mod tests {
         let mut w = XdrWriter::new();
         w.write_i32(NfsOpnum4::Access as i32).unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let err = NfsResOp4::decode(&mut r).unwrap_err();
 
         match err {
@@ -1328,7 +1328,7 @@ mod tests {
         let mut w = XdrWriter::new();
         original.encode(&mut w).unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let decoded = Compound4Args::decode(&mut r).unwrap();
 
         assert_eq!(decoded, original);
@@ -1347,7 +1347,7 @@ mod tests {
         let mut w = XdrWriter::new();
         original.encode(&mut w).unwrap();
 
-        let mut r = XdrReader::new(&w.as_bytes());
+        let mut r = XdrReader::new(w.as_bytes());
         let decoded = Compound4Res::decode(&mut r).unwrap();
 
         assert_eq!(decoded, original);
