@@ -318,8 +318,8 @@ impl NfsArgOp4 {
             // NfsOpnum4::Lock => Ok(NfsArgOp4::Lock(Lock4Args::decode(r)?)),
             // NfsOpnum4::LockT => Ok(NfsArgOp4::LockT(LockT4Args::decode(r)?)),
             // NfsOpnum4::LockU => Ok(NfsArgOp4::LockU(LockU4Args::decode(r)?)),
-            // NfsOpnum4::Lookup => Ok(NfsArgOp4::Lookup(Lookup4Args::decode(r)?)),
-            // NfsOpnum4::LookupP => Ok(NfsArgOp4::LookupP),
+            NfsOpnum4::Lookup => Ok(NfsArgOp4::Lookup(Lookup4Args::decode(r)?)),
+            NfsOpnum4::LookupP => Ok(NfsArgOp4::LookupP(LookupP4Args::decode(r)?)),
             // NfsOpnum4::NVerify => Ok(NfsArgOp4::NVerify(NVerify4Args::decode(r)?)),
             // NfsOpnum4::Open => Ok(NfsArgOp4::Open(Open4Args::decode(r)?)),
             // NfsOpnum4::OpenAttr => Ok(NfsArgOp4::OpenAttr(OpenAttr4Args::decode(r)?)),
@@ -445,13 +445,14 @@ impl NfsArgOp4 {
             //     w.write_i32(NfsOpnum4::LockU as i32)?;
             //     arg.encode(w)?;
             // }
-            // NfsArgOp4::Lookup(arg) => {
-            //     w.write_i32(NfsOpnum4::Lookup as i32)?;
-            //     arg.encode(w)?;
-            // }
-            // NfsArgOp4::LookupP => {
-            //     w.write_i32(NfsOpnum4::LookupP as i32)?;
-            // }
+            NfsArgOp4::Lookup(arg) => {
+                w.write_i32(NfsOpnum4::Lookup as i32)?;
+                arg.encode(w)?;
+            }
+            NfsArgOp4::LookupP(arg) => {
+                w.write_i32(NfsOpnum4::LookupP as i32)?;
+                arg.encode(w)?;
+            }
             // NfsArgOp4::NVerify(arg) => {
             //     w.write_i32(NfsOpnum4::NVerify as i32)?;
             //     arg.encode(w)?;
@@ -769,13 +770,13 @@ impl NfsResOp4 {
             // NfsOpnum4::DelegPurge => Ok(NfsResOp4::DelegPurge(DelegPurge4Res::decode(r)?)),
             // NfsOpnum4::DelegReturn => Ok(NfsResOp4::DelegReturn(DelegReturn4Res::decode(r)?)),
             NfsOpnum4::GetAttr => Ok(NfsResOp4::GetAttr(GetAttr4Res::decode(r)?)),
-            // NfsOpnum4::GetFh => Ok(NfsResOp4::GetFh(GetFh4Res::decode(r)?)),
+            NfsOpnum4::GetFh => Ok(NfsResOp4::GetFh(GetFh4Res::decode(r)?)),
             // NfsOpnum4::Link => Ok(NfsResOp4::Link(Link4Res::decode(r)?)),
             // NfsOpnum4::Lock => Ok(NfsResOp4::Lock(Lock4Res::decode(r)?)),
             // NfsOpnum4::LockT => Ok(NfsResOp4::LockT(LockT4Res::decode(r)?)),
             // NfsOpnum4::LockU => Ok(NfsResOp4::LockU(LockU4Res::decode(r)?)),
             NfsOpnum4::Lookup => Ok(NfsResOp4::Lookup(Lookup4Res::decode(r)?)),
-            // NfsOpnum4::LookupP => Ok(NfsResOp4::LookupP(LookupP4Res::decode(r)?)),
+            NfsOpnum4::LookupP => Ok(NfsResOp4::LookupP(LookupP4Res::decode(r)?)),
             // NfsOpnum4::NVerify => Ok(NfsResOp4::NVerify(NVerify4Res::decode(r)?)),
             // NfsOpnum4::Open => Ok(NfsResOp4::Open(Open4Res::decode(r)?)),
             // NfsOpnum4::OpenAttr => Ok(NfsResOp4::OpenAttr(OpenAttr4Res::decode(r)?)),
@@ -854,10 +855,10 @@ impl NfsResOp4 {
                 w.write_i32(NfsOpnum4::GetAttr as i32)?;
                 res.encode(w)?;
             }
-            // NfsResOp4::GetFh(res) => {
-            //     w.write_i32(NfsOpnum4::GetFh as i32)?;
-            //     res.encode(w)?;
-            // }
+            NfsResOp4::GetFh(res) => {
+                w.write_i32(NfsOpnum4::GetFh as i32)?;
+                res.encode(w)?;
+            }
             // NfsResOp4::Link(res) => {
             //     w.write_i32(NfsOpnum4::Link as i32)?;
             //     res.encode(w)?;
@@ -878,10 +879,10 @@ impl NfsResOp4 {
                 w.write_i32(NfsOpnum4::Lookup as i32)?;
                 res.encode(w)?;
             }
-            // NfsResOp4::LookupP(res) => {
-            //     w.write_i32(NfsOpnum4::LookupP as i32)?;
-            //     res.encode(w)?;
-            // }
+            NfsResOp4::LookupP(res) => {
+                w.write_i32(NfsOpnum4::LookupP as i32)?;
+                res.encode(w)?;
+            }
             // NfsResOp4::NVerify(res) => {
             //     w.write_i32(NfsOpnum4::NVerify as i32)?;
             //     res.encode(w)?;
