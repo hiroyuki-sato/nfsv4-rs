@@ -313,7 +313,7 @@ impl NfsArgOp4 {
             // NfsOpnum4::DelegPurge => Ok(NfsArgOp4::DelegPurge(DelegPurge4Args::decode(r)?)),
             // NfsOpnum4::DelegReturn => Ok(NfsArgOp4::DelegReturn(DelegReturn4Args::decode(r)?)),
             // NfsOpnum4::GetAttr => Ok(NfsArgOp4::GetAttr(GetAttr4Args::decode(r)?)),
-            // NfsOpnum4::GetFh => Ok(NfsArgOp4::GetFh),
+            NfsOpnum4::GetFh => Ok(NfsArgOp4::GetFh(GetFh4Args::decode(r)?)),
             // NfsOpnum4::Link => Ok(NfsArgOp4::Link(Link4Args::decode(r)?)),
             // NfsOpnum4::Lock => Ok(NfsArgOp4::Lock(Lock4Args::decode(r)?)),
             // NfsOpnum4::LockT => Ok(NfsArgOp4::LockT(LockT4Args::decode(r)?)),
@@ -426,9 +426,10 @@ impl NfsArgOp4 {
             //     w.write_i32(NfsOpnum4::GetAttr as i32)?;
             //     arg.encode(w)?;
             // }
-            // NfsArgOp4::GetFh => {
-            //     w.write_i32(NfsOpnum4::GetFh as i32)?;
-            // }
+            NfsArgOp4::GetFh(arg) => {
+                w.write_i32(NfsOpnum4::GetFh as i32)?;
+                arg.encode(w)?;
+            }
             // NfsArgOp4::Link(arg) => {
             //     w.write_i32(NfsOpnum4::Link as i32)?;
             //     arg.encode(w)?;
